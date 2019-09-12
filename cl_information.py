@@ -2,12 +2,12 @@
 
 class Filters:
     #A file to store room filters, rooming categories, and state keys in dictionaries
-    room_filters = {'private_room' : True, #bool
+    room_filters = {'private_room' : None, #bool
         'private_bath' : None, #bool
         'cats_ok' : None, #bool
         'dogs_ok' : None, #bool
-        'min_price' : 500,
-        'max_price' : 1200,
+        'min_price' : None,
+        'max_price' : None,
         'min_ft2' : None,
         'max_ft2' : None,
         'min_bedrooms' : None,
@@ -17,7 +17,7 @@ class Filters:
         'no_smoking' : None, #bool
         'is_furnished' : None, #bool
         'wheelchair_acccess' : None, #bool
-        'has_image' : True #bool
+        'has_image' : None #bool
     }
 
     cat_dict = {'apa':'apts/housing for rent',
