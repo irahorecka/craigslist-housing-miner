@@ -31,8 +31,8 @@ class Filters:
         'vac':'vacation rentals',
         'hou':'wanted: apts',
         'rew':'wanted: real estate',
-        'sha':'wanted: room/share',
-        'sbw':'wanted: sublet/temp'}
+        'sha':'wanted: room & share',
+        'sbw':'wanted: sublet & temp'}
 
     apa_dict = {'aap':'apts/housing for rent',
         'swp':'housing swap',
