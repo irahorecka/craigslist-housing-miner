@@ -1,6 +1,3 @@
-#2019-09-11 - a general all-housing search criteria for california. The purpose of this script is to acquire information on california housing information
-#post-processing should be done on data acquired by this script
-
 import os
 import csv
 from craigslist import CraigslistHousing
@@ -22,7 +19,6 @@ class CL_Housing_Select:
         self.code_break = code_break
 
     def small_region(self):
-        #make this into another method and add small_region addition below as its native method function
         self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters)
 
     def large_region(self, inst_area):
