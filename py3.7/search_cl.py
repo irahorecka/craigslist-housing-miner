@@ -57,11 +57,11 @@ def my_logger(func):
 
 
 class ExecSearch:
-    def __init__(self, states):
+    def __init__(self, states, filters):
         self.states = states
         self.code_break = ';n@nih;'
         self.header = [f'CL State{self.code_break}CL Region{self.code_break}CL District{self.code_break}Housing Category{self.code_break}Post ID{self.code_break}Repost of (Post ID){self.code_break}Title{self.code_break}URL{self.code_break}Date Posted{self.code_break}Time Posted{self.code_break}Price{self.code_break}Location{self.code_break}Post has Image{self.code_break}Post has Geotag{self.code_break}Bedrooms{self.code_break}Area']
-        self.filter = ['roo']
+        self.filter = filters
 
     @my_logger
     def cl_search(self):
@@ -116,5 +116,5 @@ class ExecSearch:
             print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
 def execute_search():
-    search_criteria = ExecSearch(sk.state_keys)
+    search_criteria = ExecSearch(sk.state_keys, sk.category_filters)
     search_criteria.cl_search()

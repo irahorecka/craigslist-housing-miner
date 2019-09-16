@@ -37,17 +37,17 @@ ca_county <- subset(counties, region == "california")
 #dat$long <-  as.numeric(substr((str_extract_all(dat$Post.has.Geotag,"\\(?[0-9,.]+\\)?"))[[1]][1],2,nchar(dat$Post.has.Geotag)-2))
 #ca_county <- merge(ca_county, county_cl[, c("subregion", "Median")], by="subregion")
 
-# dat <- dat %>%
-#   filter(Bedrooms == 2)
+dat <- dat %>%
+  filter(Bedrooms == 2)
 ca_base <- ggplot(ca_df, aes(x = long, y = lat, group = group)) +
   coord_fixed(1.3) +
-  geom_polygon(color = 'black',fill='grey30')
+  geom_polygon(color = 'black',fill='grey20')
 ca_base + theme_nothing() +
   geom_polygon(data = ca_county, fill = NA, color = "black") +
   geom_polygon(color = "black", fill = NA) +
-  coord_fixed(xlim = c(-120, -124),  ylim = c(36, 39.8), ratio = 1.3) +
-  geom_point(data=dat, aes(y=long,x=lat, color=(Price_Area)), inherit.aes = F, size = 2, alpha = .3) +
-  scale_color_viridis(option = 'B') 
+  coord_fixed(xlim = c(-121.2, -123),  ylim = c(36.7, 38.9), ratio = 1.3) +
+  geom_point(data=dat, aes(y=long,x=lat, color=(Price_Area)), inherit.aes = F, size = 2, alpha = .5) +
+  scale_color_viridis(option = 'B', name = 'Price')
 
 hist(dat$Price_Area)
 qqnorm(dat$Price_Area)
