@@ -46,13 +46,11 @@ class CL_Housing_Select:
 
 def my_logger(func):
     logging.basicConfig(filename='{}.log'.format(func.__name__), level = logging.INFO)
-
     def wrapper(*args, **kwargs):
         date_time = str(datetime.datetime.now())[:-10]
         logging.info(
             'Ran with filters: {} at {}'.format(clsd.room_filters,date_time))
         return func(*args, **kwargs)
-
     return wrapper
 
 
@@ -106,7 +104,7 @@ class ExecSearch:
                                     else:
                                         housing_result = CL_Housing_Select(reg, cat, clsd.room_filters, self.code_break, geotag=True)
                                     housing_result.small_region()
-                                    append_list = housing_result.exec_search(header_list, state.title(), reg, sub_reg, cat_name)
+                                    append_list = housing_result.exec_search(header_list, state.title(), reg, reg, cat_name)
                                     print(state, reg, cat)
                                     housing_result.write_to_file(append_list, reg_name, state)
                     except ValueError:

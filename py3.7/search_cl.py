@@ -10,6 +10,8 @@ from search_information import SelectionKeys as sk
 import copy
 base_dir = os.getcwd()
 
+#add zipcode feature
+
 class CL_Housing_Select:
     def __init__(self, inst_site, inst_category, inst_filters, code_break,geotag=False):
         self.geotag = geotag
@@ -46,13 +48,11 @@ class CL_Housing_Select:
 
 def my_logger(func):
     logging.basicConfig(filename=f'{func.__name__}.log', level = logging.INFO)
-
     def wrapper(*args, **kwargs):
         date_time = str(datetime.datetime.now())[:-10]
         logging.info(
             f'Ran with filters: {clsd.room_filters} at {date_time}')
         return func(*args, **kwargs)
-
     return wrapper
 
 
@@ -106,7 +106,7 @@ class ExecSearch:
                                     else:
                                         housing_result = CL_Housing_Select(reg, cat, clsd.room_filters, self.code_break, geotag=True)
                                     housing_result.small_region()
-                                    append_list = housing_result.exec_search(header_list, state.title(), reg, sub_reg, cat_name)
+                                    append_list = housing_result.exec_search(header_list, state.title(), reg, reg, cat_name)
                                     print(state, reg, cat)
                                     housing_result.write_to_file(append_list, reg_name, state)
                     except ValueError:

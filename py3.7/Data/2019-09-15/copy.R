@@ -28,7 +28,9 @@ dat <- dat %>%
 dat$Price_Area <- dat$Price/as.numeric(dat$Area)
 dat <- dat %>%
   filter(Price_Area > quantile(Price_Area,.25)-1.5*(IQR(Price_Area)),
-         Price_Area < quantile(Price_Area,.75)+1.5*(IQR(Price_Area)))
+         Price_Area < quantile(Price_Area,.75)+1.5*(IQR(Price_Area)),
+         Price_Area > 1
+         )
 
 states <- map_data('state')
 counties <- map_data('county')
@@ -38,16 +40,17 @@ ca_county <- subset(counties, region == "california")
 #ca_county <- merge(ca_county, county_cl[, c("subregion", "Median")], by="subregion")
 
 dat <- dat %>%
-  filter(Bedrooms == 2)
+  filter(Bedrooms < 3)
 ca_base <- ggplot(ca_df, aes(x = long, y = lat, group = group)) +
   coord_fixed(1.3) +
   geom_polygon(color = 'black',fill='grey20')
 ca_base + theme_nothing() +
   geom_polygon(data = ca_county, fill = NA, color = "black") +
   geom_polygon(color = "black", fill = NA) +
-  coord_fixed(xlim = c(-121.2, -123),  ylim = c(36.7, 38.9), ratio = 1.3) +
-  geom_point(data=dat, aes(y=long,x=lat, color=(Price_Area)), inherit.aes = F, size = 2, alpha = .5) +
-  scale_color_viridis(option = 'B', name = 'Price')
+  coord_fixed(xlim = c(-121.7, -122.5),  ylim = c(37.2, 37.6), ratio = 1.3) +
+  geom_point(data=dat, aes(y=long,x=lat, color=(Price_Area)), inherit.aes = F, size = 2, alpha = .5, shape = 17) +
+  scale_color_viridis(option = 'B', name = 'Price') #+ 
+  #geom_point(y = 37.3861, x = -122.0839, size = 4, color = 'blue') #mountain view
 
 hist(dat$Price_Area)
 qqnorm(dat$Price_Area)
