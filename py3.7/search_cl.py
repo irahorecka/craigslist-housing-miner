@@ -60,6 +60,8 @@ def my_logger(func):
 
 
 class ExecSearch:
+    exclusion_list = []
+
     def __init__(self, states, filters):
         self.states = states
         self.code_break = ';n@nih;'
@@ -77,7 +79,11 @@ class ExecSearch:
                 for reg, reg_name in eval(f'sr.{state}')["focus_dist"].items():
                     if reg == 'newyork' or reg == 'boston':
                         housing_dict = clsd.apa_dict
+                    if reg in self.exclusion_list:
+                        continue
                     for sub_reg in reg_name:
+                        if sub_reg in self.exclusion_list:
+                            continue
                         for cat, cat_name in housing_dict.items():
                             if cat not in self.filter:
                                 continue
@@ -92,11 +98,11 @@ class ExecSearch:
                                     append_list = housing_result.exec_search(header_list, state.title(), reg, sub_reg, cat_name)
                                     print(state, sub_reg, cat)
                                     housing_result.write_to_file(append_list, sub_reg, state)
-                        print(reg_name.remove(sub_reg)) #type_list
+                        self.exclusion_list.append(sub_reg)
+                self.exclusion_list.append(reg)
                 focus_list.append(reg)
-                print(eval(f'sr.{state}')["focus_dist"].pop(reg)) #type_dict
             for reg, reg_name in eval(f'sr.{state}').items():
-                if reg in focus_list:
+                if reg in focus_list or reg in self.exclusion_list:
                     continue
                 else:
                     try:
@@ -117,7 +123,7 @@ class ExecSearch:
                     except ValueError:
                         print('focus_dict encountered')
                         pass
-                print(eval(f'sr.{state}').pop(reg))
+                self.exclusion_list.append(reg)
             t1 = time.time()
             print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
