@@ -92,7 +92,9 @@ class ExecSearch:
                                     append_list = housing_result.exec_search(header_list, state.title(), reg, sub_reg, cat_name)
                                     print(state, sub_reg, cat)
                                     housing_result.write_to_file(append_list, sub_reg, state)
+                        print(reg_name.remove(sub_reg)) #type_list
                 focus_list.append(reg)
+                print(eval(f'sr.{state}')["focus_dist"].pop(reg)) #type_dict
             for reg, reg_name in eval(f'sr.{state}').items():
                 if reg in focus_list:
                     continue
@@ -115,6 +117,7 @@ class ExecSearch:
                     except ValueError:
                         print('focus_dict encountered')
                         pass
+                print(eval(f'sr.{state}').pop(reg))
             t1 = time.time()
             print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
