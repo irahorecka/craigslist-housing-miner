@@ -47,10 +47,10 @@ ca_base <- ggplot(ca_df, aes(x = long, y = lat, group = group)) +
 ca_base + theme_nothing() +
   geom_polygon(data = ca_county, fill = NA, color = "black") +
   geom_polygon(color = "black", fill = NA) +
+  geom_point(y = 37.3895, x = -122.0184, size = 60, alpha = .5, color = 'black') +#94085
   coord_fixed(xlim = c(-121.7, -122.5),  ylim = c(37.2, 37.6), ratio = 1.3) +
   geom_point(data=dat, aes(y=long,x=lat, color=(Price_Area)), inherit.aes = F, size = 2, alpha = .5, shape = 17) +
-  scale_color_viridis(option = 'B', name = 'Price') #+ 
-  #geom_point(y = 37.3861, x = -122.0839, size = 4, color = 'blue') #mountain view
+  scale_color_viridis(option = 'B', name = 'Price')
 
 hist(dat$Price_Area)
 qqnorm(dat$Price_Area)
