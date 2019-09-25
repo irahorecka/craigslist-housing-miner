@@ -2,7 +2,10 @@
 
 class Filters:
     #A file to store room filters, rooming categories, and state keys in dictionaries
-    room_filters = {'private_room' : None, #bool
+    #extra_filters is a general filter sheet for specifics - not all housing categories adhere to every part of this filter
+    #e.g. you will not look for max_bedrooms for a room/share craigslist posts
+    #create selectors in the future to limit which filters are mutable by the user per category they choose
+    extra_filters = {'private_room' : None, #bool
         'private_bath' : None, #bool
         'cats_ok' : None, #bool
         'dogs_ok' : None, #bool
@@ -20,7 +23,11 @@ class Filters:
         'has_image' : None #bool
     }
 
-    cat_dict = {'apa':'apts/housing for rent',
+    distance_filters = {'search_distance': None,
+        'zip_code': None
+    }
+
+    cat_dict = {'apa':'apts & housing for rent',
         'swp':'housing swap',
         'off':'office & commercial',
         'prk':'parking & storage',
@@ -34,7 +41,7 @@ class Filters:
         'sha':'wanted: room & share',
         'sbw':'wanted: sublet & temp'}
 
-    apa_dict = {'aap':'apts/housing for rent',
+    apa_dict = {'aap':'apts & housing for rent',
         'swp':'housing swap',
         'off':'office & commercial',
         'prk':'parking & storage',
@@ -45,8 +52,8 @@ class Filters:
         'vac':'vacation rentals',
         'hou':'wanted: apts',
         'rew':'wanted: real estate',
-        'sha':'wanted: room/share',
-        'sbw':'wanted: sublet/temp'}
+        'sha':'wanted: room & share',
+        'sbw':'wanted: sublet & temp'}
 
 
 class States:

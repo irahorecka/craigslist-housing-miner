@@ -6,8 +6,7 @@ class SelectionKeys:
         'mississippi', 'missouri', 'montana', 'nebraska', 'nevada', 'new_hampshire', 'new_jersey', 'new_mexico', 'new_york', 'north_carolina', 'north_dakota', 
         'ohio', 'oklahoma', 'oregon', 'pennsylvania', 'rhode_island', 'south_carolina', 'south_dakota', 'tennessee', 'texas', 'utah', 'vermont', 'virginia', 
         'washington', 'west_virginia', 'wisconsin', 'wyoming']
-    category_filters = ['apa']
-    #selected_reg = ['sfbay']
-    #selected_cat = ['sub', 'roo']
-    #district_list = ['oakland','berkeley','richmond','el cerrito','san leandro','alameda','albany','hercules']
-    #name = 'ira'
+    selected_reg = [] # e.g. ['sfbay','losangeles']
+    selected_cat = ['apa'] # e.g. ['apa', 'roo'] - search_cl.py will handle boston and newyork exceptions
+    district_list = [] # e.g. ['oakland','berkeley']
+    dist_filters = [] # [zipcode, miles from zip]
