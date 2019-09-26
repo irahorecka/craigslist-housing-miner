@@ -119,7 +119,7 @@ class ExecSearch:
             self.room_filter['search_distance'] = self.zip_list[1]
         for state in self.states:
             focus_list = []
-            try:
+            if 'focus_dist' in eval(f'sr.{state}'):
                 for reg, reg_name in eval(f'sr.{state}')["focus_dist"].items():
                     if reg in self.regions or self.regions == []:
                         is_loop = True
@@ -146,7 +146,7 @@ class ExecSearch:
                         self.house_filter = ['apa' if i == 'aap' else i for i in self.house_filter]
                     self.pickle_file.pickle_dump(reg)
                     focus_list.append(reg)
-            except KeyError:
+            else:
                 for reg, reg_name in eval(f'sr.{state}').items():
                     if reg in self.regions or self.regions == []:
                         if reg in focus_list:
