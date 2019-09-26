@@ -118,7 +118,6 @@ class ExecSearch:
             self.room_filter['zip_code'] = self.zip_list[0]
             self.room_filter['search_distance'] = self.zip_list[1]
         for state in self.states:
-            focus_list = []
             if 'focus_dist' in eval(f'sr.{state}'):
                 for reg, reg_name in eval(f'sr.{state}')["focus_dist"].items():
                     if reg in self.regions or self.regions == []:
@@ -145,25 +144,22 @@ class ExecSearch:
                             self.pickle_file.pickle_dump(sub_reg)
                         self.house_filter = ['apa' if i == 'aap' else i for i in self.house_filter]
                     self.pickle_file.pickle_dump(reg)
-                    focus_list.append(reg)
-            else:
-                for reg, reg_name in eval(f'sr.{state}').items():
-                    if reg in self.regions or self.regions == []:
-                        if reg in focus_list:
-                            continue
-                        if reg in self.pickle_file.pickle_read():
-                            continue
-                        else:
-                            try:
-                                for cat in housing_dict:
-                                    if cat not in self.house_filter:
-                                        continue
-                                    else:
-                                        self.search_geotag(state, reg, cat)
-                            except ValueError:
-                                print('focus_dict encountered')
-                                pass
-                    self.pickle_file.pickle_dump(reg)
+            for reg, reg_name in eval(f'sr.{state}').items():
+                if reg in self.regions or self.regions == []:
+                    if reg in self.pickle_file.pickle_read():
+                        continue
+                    else:
+                        try:
+                            for cat in housing_dict:
+                                if cat not in self.house_filter:
+                                    continue
+                                else:
+                                    self.search_geotag(state, reg, cat)
+                        except ValueError:
+                            print('focus_dict encountered')
+                            pass
+                self.pickle_file.pickle_dump(reg)
+            self.pickle_file.pickle_dump(state)
         t1 = time.time()
         print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
