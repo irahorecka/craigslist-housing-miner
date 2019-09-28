@@ -7,12 +7,15 @@ import pickle
 import os
 import random
 import multiprocessing
+import psutil
 from craigslist import CraigslistHousing
 from cl_information import Filters as clsd, States as sr #make better abbreviation later
 from search_information import SelectionKeys as sk
 base_dir = os.getcwd()
 
-#FIX BUGG FOR AAP I.E. NY AND BOS
+#1) DISCOVER TOTAL SUB_REG AND REG NUMBER IN CONT US - MAKE LOAD BAR 
+#2) CREATE UPDATED GUI FOR CORE USAGE 1,2,3,4 USING PSUTIL
+#3) SEPARATE STATE AND REG LIST FOR PICKLE FILE
 class CL_Housing_Select:
     def __init__(self, inst_site, inst_category, inst_filters, code_break, geotag=False):
         self.geotag = geotag
@@ -58,17 +61,28 @@ class CL_Housing_Select:
 class Pickle:
     def pickle_reset(self):
         with open("completed_search.txt", "wb") as pickle_set:
-            pickle.dump(set(), pickle_set)
+            pickle.dump({'state':set(),'region':set(),'geotag':''}, pickle_set)
 
-    def pickle_read(self):
+    def pickle_read(self, category):
         with open("completed_search.txt", "rb") as pickle_set:
-            return pickle.load(pickle_set)
+            try:
+                return pickle.load(pickle_set)[category]
+            except EOFError as e:
+                print(f'There was an error::{e}\nRERUN!')
+                execute_search(list_shuffle(sk.state_keys))
 
-    def pickle_dump(self, item_to_write):
+    def pickle_dump(self, category, item_to_write):
         with open("completed_search.txt", "rb") as pickle_set:
-            completed = pickle.load(pickle_set)
+            try:
+                completed = pickle.load(pickle_set)
+            except EOFError as e:
+                print(f'There was an error::{e}\nRERUN!')
+                execute_search(list_shuffle(sk.state_keys))
         with open("completed_search.txt", "wb") as pickle_set:
-            completed.add(item_to_write)
+            if type(completed[category]) == set:
+                completed[category].add(item_to_write) 
+            else:
+                completed[category] = item_to_write
             pickle.dump(completed, pickle_set)
 
 
@@ -103,37 +117,32 @@ class ExecSearch:
         else:
             housing_result.large_region(area)
         append_list = housing_result.exec_search(header_list, state.title(), reg, area, cat)
-        print(state, reg, cat)
+        #print(state, reg, cat)
         housing_result.write_to_file(append_list, area, state)
 
     def search_geotag(self, state, reg, cat, area = ''):
-        for i in range(2):
-            if i == 0:
-                self.search_package(state, reg, cat, False, area) #no geotag search - False
-            #else:
-                #self.search_package(state, reg, cat, True, area) #geotag search - True
+        self.search_package(state, reg, cat, self.pickle_file.pickle_read('geotag'), area)
+            
 
     @my_logger
     def cl_search(self):
+        time.sleep(.001)
         t0 = time.time()
         housing_dict = clsd.cat_dict
         if self.zip_list != []:
             self.room_filter['zip_code'] = self.zip_list[0]
             self.room_filter['search_distance'] = self.zip_list[1]
         for state in self.states:
-            if state in self.pickle_file.pickle_read():
+            if state in self.pickle_file.pickle_read('state'):
                 continue
             if 'focus_dist' in eval(f'sr.{state}'):
                 for reg, reg_name in eval(f'sr.{state}')["focus_dist"].items():
                     if reg in self.regions or self.regions == []:
                         is_loop = True
-                        if reg == 'newyork' or reg == 'boston':
-                            housing_dict = clsd.apa_dict
-                            self.house_filter = ['aap' if i == 'apa' else i for i in self.house_filter]
-                        if reg in self.pickle_file.pickle_read():
+                        if reg in self.pickle_file.pickle_read('region'):
                             continue
                         for sub_reg in reg_name:
-                            if sub_reg in self.pickle_file.pickle_read():
+                            if sub_reg in self.pickle_file.pickle_read('region'):
                                 continue
                             for cat in housing_dict:
                                 if cat not in self.house_filter:
@@ -146,12 +155,12 @@ class ExecSearch:
                                     self.search_geotag(state, reg, cat, sub_reg)
                             if not is_loop:
                                 break
-                            self.pickle_file.pickle_dump(sub_reg)
+                            self.pickle_file.pickle_dump('region', sub_reg)
                         self.house_filter = ['apa' if i == 'aap' else i for i in self.house_filter]
-                    self.pickle_file.pickle_dump(reg)
+                    self.pickle_file.pickle_dump('region', reg)
             for reg, reg_name in eval(f'sr.{state}').items():
                 if reg in self.regions or self.regions == []:
-                    if reg in self.pickle_file.pickle_read():
+                    if reg in self.pickle_file.pickle_read('region'):
                         continue
                     else:
                         try:
@@ -161,12 +170,12 @@ class ExecSearch:
                                 else:
                                     self.search_geotag(state, reg, cat)
                         except ValueError:
-                            print('focus_dict encountered')
+                            #print('focus_dist encountered')
                             pass
-                self.pickle_file.pickle_dump(reg)
-            self.pickle_file.pickle_dump(state)
+                self.pickle_file.pickle_dump('region', reg)
+            self.pickle_file.pickle_dump('state', state)
         t1 = time.time()
-        print(f"Run time: {'%.2f' % (t1 - t0)} sec")
+        #print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
 
 def list_shuffle(lst):
@@ -180,15 +189,12 @@ def execute_search(state_list):
     search_criteria.cl_search()  
 
 
-if __name__ == '__main__':
-    clear_pickle = (input('Would you like to clear search history?[y/n]: ')).lower()
-    if clear_pickle == 'y':
-        Pickle().pickle_reset()
-    t0 = time.time()
+def main():
+    #start three-core process
     p1 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
     p2 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
     p3 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
-
+    
     p1.start()
     p2.start()
     p3.start()
@@ -196,5 +202,20 @@ if __name__ == '__main__':
     p1.join()
     p2.join()
     p3.join()
+
+
+if __name__ == '__main__':
+    clear_pickle = (input('Would you like to clear search history?[y/n]: ')).lower()
+    if clear_pickle == 'y':
+        Pickle().pickle_reset() if input('Are you sure?[y/n]: ') == 'y' else None
+    geo_tag = (input('Would you like to search for geotagged results?\nThe performance will significantly decline.[y/n]: ')).lower() #ADD TO PICKLE FILE
+
+    if geo_tag == 'y':
+        Pickle().pickle_dump('geotag',True)
+    else:
+        Pickle().pickle_dump('geotag',False)
+
+    t0 = time.time()
+    main()
     t1 = time.time()
     print(f"Multiprocessing run time: {'%.2f' % (t1 - t0)} sec")
