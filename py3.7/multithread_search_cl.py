@@ -7,15 +7,12 @@ import pickle
 import os
 import random
 import multiprocessing
-import psutil
 from craigslist import CraigslistHousing
 from cl_information import Filters as clsd, States as sr #make better abbreviation later
 from search_information import SelectionKeys as sk
-base_dir = os.getcwd()
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-#1) DISCOVER TOTAL SUB_REG AND REG NUMBER IN CONT US - MAKE LOAD BAR 
-#2) CREATE UPDATED GUI FOR CORE USAGE 1,2,3,4 USING PSUTIL
-#3) SEPARATE STATE AND REG LIST FOR PICKLE FILE
+#1) CATCH EXCEPTIONS AND RUN AGAIN
 class CL_Housing_Select:
     def __init__(self, inst_site, inst_category, inst_filters, code_break, geotag=False):
         self.geotag = geotag
@@ -25,10 +22,18 @@ class CL_Housing_Select:
         self.code_break = code_break
 
     def small_region(self):
-        self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters)
+        try:
+            self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters)
+        except ConnectionError as e:
+            print(f'There was an error:: {e}\nRERUN!')
+            execute_search(list_shuffle(sk.state_keys))
 
     def large_region(self, inst_area):
-        self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters,area=inst_area)
+        try:
+            self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters,area=inst_area)
+        except ConnectionError as e:
+            print(f'There was an error:: {e}\nRERUN!')
+            execute_search(list_shuffle(sk.state_keys))
 
     def exec_search(self, header_list, state, region, sub_region, category):
         try:
@@ -189,19 +194,26 @@ def execute_search(state_list):
     search_criteria.cl_search()  
 
 
-def main():
-    #start three-core process
-    p1 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
-    p2 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
-    p3 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
-    
-    p1.start()
-    p2.start()
-    p3.start()
+def main(delta_t):
+    while delta_t > 0.05:
+        t0 = time.time()
+        #start three-core process
+        p1 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
+        p2 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
+        p3 = multiprocessing.Process(target=execute_search, args=(list_shuffle(sk.state_keys),))
+        
+        p1.start()
+        p2.start()
+        p3.start()
 
-    p1.join()
-    p2.join()
-    p3.join()
+        p1.join()
+        p2.join()
+        p3.join()
+
+        t1 = time.time()
+        delta_t = t1 - t0
+        print(f"Multiprocessing run time: {'%.2f' % (delta_t)} sec")
+        main(delta_t)
 
 
 if __name__ == '__main__':
@@ -214,8 +226,5 @@ if __name__ == '__main__':
         Pickle().pickle_dump('geotag',True)
     else:
         Pickle().pickle_dump('geotag',False)
-
-    t0 = time.time()
-    main()
-    t1 = time.time()
-    print(f"Multiprocessing run time: {'%.2f' % (t1 - t0)} sec")
+    main(1)
+    

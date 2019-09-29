@@ -8,7 +8,7 @@ from cl_information import Filters as clsd #make better abbreviation later
 from cl_information import States as sr #make better abbreviation later
 from search_information import SelectionKeys as sk
 import copy
-base_dir = os.getcwd()
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 class CL_Housing_Select:
     def __init__(self, inst_site, inst_category, inst_filters, code_break,geotag=False):
