@@ -1,5 +1,6 @@
 from operator import itemgetter 
 from multithread_search_cl import Pickle
+from search_information import SelectionKeys as sk
 import progressbar
 import sys
 import pickle
@@ -21,21 +22,23 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 0, 
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print('%s |%s| %s%% %s' % (prefix, bar, percent, suffix) + f" CPU {psutil.cpu_percent()}%", end = '\r')
+    print('%s |%s| %s%% %s' % (prefix, bar, percent, suffix) + f" {iteration}/{total} States : CPU {psutil.cpu_percent()}%", end = '\r')
     # Print New Line on Complete
     if iteration == total: 
         print()
 
 def timer():
-    max_reg = 481
+    max_reg = len(sk.state_keys)
     value = 0
 
-    while value != max_reg:
-        value = len(Pickle().pickle_read('region'))
-        printProgressBar(value, max_reg, prefix = '  Progress:', suffix = '::', length = 25)
-        sys.stdout.write("\033[K")
-        time.sleep(1)
-
+    try:
+        while value != max_reg:
+            value = len(Pickle().pickle_read('state'))
+            printProgressBar(value, max_reg, prefix = '  Progress:', suffix = ':', length = 25)
+            sys.stdout.write("\033[K")
+            time.sleep(1)
+    except KeyboardInterrupt as e:
+        print(f'{e} Exiting protocol...')
 
 if __name__ == '__main__':
     timer()
