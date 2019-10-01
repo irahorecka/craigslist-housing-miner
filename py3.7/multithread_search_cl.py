@@ -63,6 +63,7 @@ class CL_Housing_Select:
 
 
 class Pickle:
+    #LOOK INTO EOFERROR FILE NOT FOUND
     def pickle_reset(self):
         with open("completed_search.txt", "wb") as pickle_set:
             pickle.dump({'state':set(),'region':set(),'temp_region':set(),'geotag':''}, pickle_set)
@@ -81,7 +82,13 @@ class Pickle:
             except EOFError as e:
                 handle_error(e)
         with open("completed_search.txt", "wb") as pickle_set:
-            pickle_file[category].remove(item_to_remove) 
+            if item_to_remove == 'ALL':
+                if type(pickle_file[category]) == set:
+                    pickle_file[category] = set() 
+                else:
+                    pickle_file[category] = ''
+            else:
+                pickle_file[category].remove(item_to_remove) 
             pickle.dump(pickle_file, pickle_set)
 
     def pickle_dump(self, category, item_to_write):
@@ -240,11 +247,11 @@ def main():
 
 
 if __name__ == '__main__':
+    Pickle().pickle_remove('temp_region', 'ALL')
     clear_pickle = (input('Would you like to clear search history?[y/n]: ')).lower()
     if clear_pickle == 'y':
         Pickle().pickle_reset() if input('Are you sure?[y/n]: ') == 'y' else None
     geo_tag = (input('Would you like to search for geotagged results?\nThe performance will significantly decline.[y/n]: ')).lower() #ADD TO PICKLE FILE
-
     if geo_tag == 'y':
         Pickle().pickle_dump('geotag',True)
     else:
