@@ -57,6 +57,8 @@ class Filters:
 
 
 class States:
+    '''All states, sites, and area to use in Craiglsist queries (Continental United States)'''
+
     alabama = {'auburn':'Auburn',
         'bham':'Birmingham',
         'columbusga':'Columbus, GA',
@@ -84,7 +86,8 @@ class States:
         'jonesboro':'Jonesboro',
         'littlerock':'Little Rock',
         'memphis':'Memphis, TN',
-        'texarkana':'Texarkana'}
+        'texarkana':'Texarkana'
+        }
 
     california = {'bakersfield':'Bakersfield',
         'chico':'Chico',
@@ -115,22 +118,10 @@ class States:
         'ventura':'Ventura County',
         'visalia':'Visalia-Tulare',
         'yubasutter':'Yuba-Sutter',
-        'focus_dist':{'sfbay': ['eby',#east bay
-                'nby',#north bay
-                'sby',#south bay
-                'pen',#peninsula
-                'sfc',#san francisco county
-                'scz'],#santa cruz
-                'losangeles': ['wst',
-                'sfv',
-                'lac',
-                'sgv',
-                'lgb',
-                'ant'],
-                'sandiego': ['csd',
-                'nsd',
-                'esd',
-                'ssd']}
+        'focus_dist':{'sfbay': ['eby', 'nby', 'sby', 'pen', 'sfc', 'scz'],
+            'losangeles': ['wst', 'sfv', 'lac', 'sgv', 'lgb', 'ant'],
+            'sandiego': ['csd', 'nsd', 'esd', 'ssd']
+            }
         } 
 
     colorado = {'boulder':'Boulder',
@@ -148,11 +139,15 @@ class States:
         'newlondon':'Eastern CT',
         'newyork':'Fairfield County',
         'nwct':'Northwest CT',
-        'focus_dist':{'newyork':['fct']}}
+        'focus_dist':{'newyork':['fct']
+            }
+        }
 
-    delaware = {'delaware':'Delaware'}
+    delaware = {'delaware':'Delaware'
+        }
 
-    district_of_columbia = {'washingtondc':'Washington DC'}
+    district_of_columbia = {'washingtondc':'Washington DC'
+        }
 
     florida = {'cfl':'Heartland Florida',
         'daytona':'Daytona Beach',
@@ -175,18 +170,11 @@ class States:
         'tallahassee':'Tallahassee',
         'tampa':'Tampa Bay Area',
         'treasure':'Treasure Coast',
-        'focus_dist':{'miami': ['mdc',
-            'brw',
-            'pbc'],
-            'tampa':['hdo',
-            'hil',
-            'psc',
-            'pnl'],
-            'fortmyers':['lee',
-            'chl',
-            'col']
+        'focus_dist':{'miami': ['mdc', 'brw', 'pbc'],
+            'tampa':['hdo', 'hil', 'psc', 'pnl'],
+            'fortmyers':['lee', 'chl', 'col']
+            }
         }
-    }
 
     georgia = {'albanyga':'Albany',
         'athensga':'Athens',
@@ -199,19 +187,17 @@ class States:
         'savannah':'Savannah-Hinesville',
         'statesboro':'Statesboro',
         'valdosta':'Valdosta',
-        'focus_dist':{'atlanta': ['atl',
-            'nat',
-            'eat',
-            'sat',
-            'wat']}
-    }
+        'focus_dist':{'atlanta': ['atl', 'nat', 'eat', 'sat', 'wat']
+            }
+        }
 
     idaho = {'boise':'Boise',
         'eastidaho':'East Idaho',
         'lewiston':'Lewiston-Clarkston',
         'pullman':'Pullman-Moscow',
         'spokane':"Spokane-Coeur d'Alene",
-        'twinfalls':'Twin Falls'}
+        'twinfalls':'Twin Falls'
+        }
 
     illinois =  {'bn':'Bloomington-Normal',
         'carbondale':'Southern Illinois',
@@ -226,13 +212,9 @@ class States:
         'rockford':'Rockford',
         'springfieldil':'Springfield',
         'stlouis':'St. Louis MO',
-        'focus_dist':{'chicago': ['chc',
-            'nch',
-            'wcl',
-            'sox',
-            'nwi',
-            'nwc']}           
-    }
+        'focus_dist':{'chicago': ['chc', 'nch', 'wcl', 'sox', 'nwi', 'nwc']
+            }           
+        }
 
     indiana = {'bloomington':'Bloomington',
         'chicago':'Chicago',
@@ -245,8 +227,9 @@ class States:
         'southbend':'South Bend-Michiana',
         'terrehaute':'Terre Haute',
         'tippecanoe':'Lafayette-West Lafayette',
-        'focus_dist':{'chicago': ['nwi']}
-    }
+        'focus_dist':{'chicago': ['nwi']
+            }
+        }
 
     iowa = {'ames':'Ames',
         'cedarrapids':'Cedar Rapids',
@@ -260,7 +243,7 @@ class States:
         'quadcities':'Quadcities, IA-IL',
         'siouxcity':'Sioux City',
         'waterloo':'Waterloo-Cedar Falls',
-    }
+        }
 
     kansas = {'kansascity':'Kansas City, MO',
         'ksu':'Manhattan',
@@ -271,7 +254,7 @@ class States:
         'swks':'Southwest KS',
         'topeka':'Topeka',
         'wichita':'Wichita'
-    }
+        }
 
     kentucky = {'bgky':'Bowiling Green',
         'cincinnati':'Cincinnati, OH',
@@ -280,7 +263,8 @@ class States:
         'lexington':'Lexington',
         'louisville':'Louisville',
         'owensboro':'Owensboro',
-        'westky':'Western Kentucky'}
+        'westky':'Western Kentucky'
+        }
 
     louisiana = {'batonrouge':'Baton Rouge',
         'cenla':'Central Louisiana',
@@ -290,9 +274,10 @@ class States:
         'monroe':'Monroe',
         'neworleans':'New Orleans',
         'shreveport':'Shreveport'
-    }
+        }
 
-    maine = {'maine':'Maine'}
+    maine = {'maine':'Maine'
+        }
 
     maryland = {'annapolis':'Annapolis',
         'baltimore':'Baltimore',
@@ -301,19 +286,17 @@ class States:
         'frederick':'Frederick',
         'smd':'South Maryland',
         'washingtondc':'MD suburbs of DC',
-        'westmd':'Western Maryland'}
+        'westmd':'Western Maryland'
+        }
 
     massachusetts = {'boston':'Boston',
         'capecod':'Cape Cod-Islands',
         'southcoast':'South Coast',
         'westernmass':'Western Massachusetts',
         'worcester':'Worcester-Central MA',
-        'focus_dist':{'boston': ['gbs',
-            'nwb',
-            'bmw',
-            'nos',
-            'sob']}
-    }
+        'focus_dist':{'boston': ['gbs', 'nwb', 'bmw', 'nos', 'sob']
+            }
+        }
 
     michigan = {'annarbor':'Ann Arbor',
         'battlecreek':'Battle Creek',
@@ -333,10 +316,9 @@ class States:
         'swmi':'Soutwest Michigan',
         'thumb':'The Thumb',
         'up':'Upper Peninsula',
-        'focus_dist':{'detroit': ['mcb',
-            'wyn',
-            'okl']}
-    }
+        'focus_dist':{'detroit': ['mcb', 'wyn', 'okl']
+            }
+        }
 
     minnesota = {'bemidji':'Bemidji',
         'brainerd':'Brainerd',
@@ -347,13 +329,9 @@ class States:
         'minneapolis':'Minneapolis-St. Paul',
         'rmn':'Rochester',
         'stcloud':'St. Cloud',
-        'focus_dist':{'minneapolis': ['hnp',
-            'ram',
-            'ank',
-            'wsh',
-            'dak',
-            'csw']}
-    }
+        'focus_dist':{'minneapolis': ['hnp', 'ram', 'ank', 'wsh', 'dak', 'csw']
+            }
+        }
 
     mississippi = {'gulfport':'Gulfport-Biloxi',
         'hattiesburg':'Hattiesburg',
@@ -361,7 +339,8 @@ class States:
         'memphis':'Memphis, TN',
         'meridian':'Meridian',
         'natchez':'Southwest MS',
-        'northmiss':'North Mississippi'}
+        'northmiss':'North Mississippi'
+        }
 
     missouri = {'columbiamo':'Columbia-Jeff City',
         'joplin':'Joplin',
@@ -371,7 +350,8 @@ class States:
         'semo':'Southeast Missouri',
         'springfield':'Springfield',
         'stjoseph':'St. Joseph',
-        'stlouis':'St. Louis'}
+        'stlouis':'St. Louis'
+        }
 
     montana = {'billings':'Billings',
         'bozeman':'Bozeman',
@@ -380,35 +360,41 @@ class States:
         'helena':'Helena',
         'kalispell':'Kalispell',
         'missoula':'Missoula',
-        'montana':'Eastern Montana'}
+        'montana':'Eastern Montana'
+        }
 
     nebraska = {'grandisland':'Grand Island',
         'lincoln':'Lincoln',
         'northplatte':'North Platte',
         'omaha':'Omaha-Council Bluffs',
         'scottsbluff':'Scottsbluff-Panhandle',
-        'siouxcity':'Sioux City, IA'}
+        'siouxcity':'Sioux City, IA'
+        }
 
     nevada = {'elko':'Elko',
         'lasvegas':'Las Vegas',
-        'reno':'Reno-Tahoe'}
+        'reno':'Reno-Tahoe'
+        }
 
-    new_hampshire = {'nh':'Nh'}
+    new_hampshire = {'nh':'New Hampshire'
+        }
 
     new_jersey = {'cnj':'Central New Jersey',
         'jerseyshore':'Jersey Shore',
         'newjersey':'North Jersey',
         'southjersey':'South Jersey',
         'newyork':'New Jersey',
-        'focus_dist':{'newyork': ['jsy']}
-    }
+        'focus_dist':{'newyork': ['jsy']
+            }
+        }
 
     new_mexico = {'albuquerque':'Albuquerque',
         'clovis':'Clovis-Portales',
         'farmington':'Farmington',
         'lascruces':'Las Cruces',
         'roswell':'Roswell-Carlsbad',
-        'santafe':'Santa Fe-Taos'}
+        'santafe':'Santa Fe-Taos'
+        }
 
     new_york = {'albany':'Albany',
         'binghamton':'Binghamton',
@@ -430,16 +416,9 @@ class States:
         'twintiers':'Twin Tiers NY-PA',
         'utica':'Utica-Rome-Oneida',
         'watertown':'Watertown',
-        'focus_dist':{'newyork': ['mnh',
-            'brk',
-            'que',
-            'brx',
-            'stn',
-            'jsy',
-            'lgi',
-            'wch',
-            'fct']}
-    }
+        'focus_dist':{'newyork': ['mnh', 'brk', 'que', 'brx', 'stn', 'jsy', 'lgi', 'wch', 'fct']
+            }
+        }
 
     north_carolina = {'asheville':'Asheville',
         'boone':'Boone',
@@ -452,13 +431,15 @@ class States:
         'outerbanks':'Outer Banks',
         'raleigh':'Raleigh-Durham-CH',
         'wilmington':'Wilmington',
-        'winstonsalem':'Winston-Salem'}
+        'winstonsalem':'Winston-Salem'
+        }
 
     north_dakota = {'bismarck':'Bismarck',
         'fargo':'Fargo-Moorhead',
         'minneapolis':'Minneapolis',
         'grandforks':'Grand Forks',
-        'nd':'North Dakota'}
+        'nd':'North Dakota'
+        }
 
     ohio = {'akroncanton':'Akron-Canton',
         'ashtabula':'Ashtabula',
@@ -477,7 +458,8 @@ class States:
         'tuscarawas':'Tuscarawas CO',
         'wheeling':'Northern Panhandle',
         'youngstown':'Youngstown',
-        'zanesville':'Zanesville-Cambridge'}
+        'zanesville':'Zanesville-Cambridge'
+        }
 
     oklahoma = {'fortsmith':'Fort Smith, AR',
         'lawton':'Lawton',
@@ -485,7 +467,8 @@ class States:
         'oklahomacity':'Oklahoma City',
         'stillwater':'Stillwater',
         'texoma':'Texoma',
-        'tulsa':'Tulsa'}
+        'tulsa':'Tulsa'
+        }
 
     oregon = {'bend':'Bend',
         'corvallis':'Corvallis-Albany',
@@ -497,14 +480,9 @@ class States:
         'portland':'Portland',
         'roseburg':'Roseburg',
         'salem':'Salem',
-        'focus_dist':{'portland': ['mlt',#multnomah county
-                'wsc',#washington county
-                'clk',#clark-cowlitz washington
-                'clc',#clackamas county
-                'nco',#north coast
-                'yam',#yamhill co,
-                'grg']}#columbia gorge
+        'focus_dist':{'portland': ['mlt', 'wsc', 'clk', 'clc', 'nco', 'yam', 'grg']
             }
+        }       
 
     pennsylvania = {'allentown':'Allentown-Johnstown',
         'altoona':'Altoona',
@@ -521,23 +499,27 @@ class States:
         'scranton':'Scranton-Wilkes-barre',
         'twintiers':'Twin Tiers NY-PA',
         'williamsport':'Williamsport',
-        'york':'York'}
+        'york':'York'
+        }
 
-    rhode_island = {'providence':'Rhode Island'}
+    rhode_island = {'providence':'Rhode Island'
+        }
 
     south_carolina = {'charleston':'Charleston',
         'columbia':'Columbia',
         'florencesc':'Florence',
         'greenville':'Greenville-Upstate',
         'hiltonhead':'Hilton Head',
-        'myrtlebeach':'Myrtle Beach'}
+        'myrtlebeach':'Myrtle Beach'
+        }
 
     south_dakota = {'nesd':'Northeast SD',
         'csd':'Pierre-Central SD',
         'nd':'North Dakota',
         'rapidcity':'Rapidcity',
         'siouxfalls':'Sioux Falls-SE SD',
-        'sd':'South Dakota'}
+        'sd':'South Dakota'
+        }
 
     tennessee = {'chattanooga':'Chattanooga',
         'clarksville':'Clarksville',
@@ -546,7 +528,8 @@ class States:
         'knoxville':'Knoxville',
         'memphis':'Memphis',
         'nashville':'Nashville',
-        'tricities':'Tricities'}
+        'tricities':'Tricities'
+        }
 
     texas = {'abilene':'Abilene',
         'amarillo':'Amarillo',
@@ -576,20 +559,19 @@ class States:
         'victoriatx':'Victoria',
         'waco':'Waco',
         'wichitafalls':'Wichita Falls',
-        'focus_dist':{'dallas': ['dal',
-            'ftw',
-            'mdf',
-            'ndf',
-            'sdf']}
+        'focus_dist':{'dallas': ['dal', 'ftw', 'mdf', 'ndf', 'sdf']
+            }
         }
 
     utah = {'logan':'Logan',
         'ogden':'Ogden-Clearfield',
         'provo':'Provo-Orem',
         'saltlakecity':'Salt Lake City',
-        'stgeorge':'St. George'}
+        'stgeorge':'St. George'
+        }
 
-    vermont = {'vermont':'Vermont'}
+    vermont = {'vermont':'Vermont'
+        }
 
     virginia = {'blacksburg':'New River Valley',
         'charlottesville':'Charlottesville',
@@ -603,7 +585,8 @@ class States:
         'roanoke':'Roanoke',
         'swva':'Southwest VA',
         'washingtondc':'Northern Virginia',
-        'winchester':'Winchester'}
+        'winchester':'Winchester'
+        }
 
     washington = {'bellingham':'Bellingham',
         'kpr':'Kennewick-Pasco-Richland',
@@ -616,20 +599,9 @@ class States:
         'spokane':"Spokane-Coeur d'Alene",
         'wenatchee':'Wenatchee',
         'yakima':'Yakima',
-        'focus_dist':{'seattle': ['see',
-            'est',
-            'sno',
-            'kit',
-            'tac',
-            'oly',
-            'skc'],
-            'portland': ['mlt',
-            'wsc',
-            'clk',
-            'clc',
-            'nco',
-            'yam',
-            'grg']}
+        'focus_dist':{'seattle': ['see', 'est', 'sno', 'kit', 'tac', 'oly', 'skc'],
+            'portland': ['mlt', 'wsc', 'clk', 'clc', 'nco', 'yam', 'grg']
+            }
         }
 
     west_virginia = {'charlestonwv':'Charleston',
@@ -639,7 +611,8 @@ class States:
         'parkersburg':'Parkersburg-Marietta',
         'swv':'Southern WV',
         'wheeling':'Northern Panhandle',
-        'wv':'West Virginia (Old)'}
+        'wv':'West Virginia (Old)'
+        }
 
     wisconsin = {'appleton':'Appleton-Oshkosh-FDL',
         'duluth':'Duluth-Superior',
@@ -652,6 +625,8 @@ class States:
         'northernwi':'Northern WI',
         'racine':'Kenosha-Racine',
         'sheboygan':'Sheboygan',
-        'wausau':'Wausau'}
+        'wausau':'Wausau'
+        }
 
-    wyoming = {'wyoming':'Wyoming'}
+    wyoming = {'wyoming':'Wyoming'
+        }
