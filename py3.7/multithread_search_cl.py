@@ -6,7 +6,7 @@ import logging
 import pickle
 import os
 import random
-import multiprocessing
+import multiprocessing as mp
 from craigslist import CraigslistHousing
 from cl_information import Filters as clsd, States as sr #make better abbreviation later
 from search_information import SelectionKeys as sk
@@ -37,7 +37,7 @@ class CL_Housing_Select:
 
     def exec_search(self, header_list, state, region, sub_region, category):
         try:
-            header_list.extend([f"{state.title()}{self.code_break}{region}{self.code_break}{sub_region}{self.code_break}{category}{self.code_break}{i['id']}{self.code_break}{i['repost_of']}{self.code_break}{i['name']}{self.code_break}{i['url']}{self.code_break}{i['datetime'][0:10]}{self.code_break}{i['datetime'][11:]}{self.code_break}{i['price']}{self.code_break}{i['where']}{self.code_break}{i['has_image']}{self.code_break}{i['geotag']}{self.code_break}{i['bedrooms']}{self.code_break}{i['area']}" for i in self.cl_instance.get_results(sort_by='newest', geotagged=self.geotag)])
+            header_list.extend([f"{state.title()}{self.code_break}{region}{self.code_break}{sub_region}{self.code_break}{category}{self.code_break}{i['id']}{self.code_break}{i['repost_of']}{self.code_break}{i['name']}{self.code_break}{i['url']}{self.code_break}{i['datetime'][0:10]}{self.code_break}{i['datetime'][11:]}{self.code_break}{i['price']}{self.code_break}{i['where']}{self.code_break}{i['has_image']}{self.code_break}{i['geotag']}{self.code_break}{i['bedrooms']}{self.code_break}{i['area']}" for i in self.cl_instance.get_results(sort_by='newest', geotagged=self.geotag, limit = 1)])
             return header_list
         except (AttributeError, OSError) as e:
             handle_error(e)
@@ -66,37 +66,22 @@ class Pickle:
     #LOOK INTO EOFERROR FILE NOT FOUND
     def pickle_reset(self):
         with open("completed_search.txt", "wb") as pickle_set:
-            pickle.dump({'state':set(),'region':set(),'temp_region':set(),'geotag':''}, pickle_set)
+            pickle.dump({'state':set(),'region':set(),'geotag':''}, pickle_set)
 
     def pickle_read(self, category):
-        time.sleep(random.uniform(.00001,.03))
         with open("completed_search.txt", "rb") as pickle_set:
             try:
                 return pickle.load(pickle_set)[category]
             except EOFError as e:
+                print('from pickle_read')
                 handle_error(e)
-
-    def pickle_remove(self, category, item_to_remove):
-        with open("completed_search.txt", "rb") as pickle_set:
-            try:
-                pickle_file = pickle.load(pickle_set)
-            except EOFError as e:
-                handle_error(e)
-        with open("completed_search.txt", "wb") as pickle_set:
-            if item_to_remove == 'ALL':
-                if type(pickle_file[category]) == set:
-                    pickle_file[category] = set() 
-                else:
-                    pickle_file[category] = ''
-            else:
-                pickle_file[category].remove(item_to_remove) 
-            pickle.dump(pickle_file, pickle_set)
 
     def pickle_dump(self, category, item_to_write):
         with open("completed_search.txt", "rb") as pickle_set:
             try:
                 pickle_file = pickle.load(pickle_set)
             except EOFError as e:
+                print('from pickle_dump')
                 handle_error(e)
         with open("completed_search.txt", "wb") as pickle_set:
             if type(pickle_file[category]) == set:
@@ -104,6 +89,7 @@ class Pickle:
             else:
                 pickle_file[category] = item_to_write
             pickle.dump(pickle_file, pickle_set)
+            pickle_set.flush()
 
 
 def my_logger(func):
@@ -153,7 +139,7 @@ class ExecSearch:
             
 
     @my_logger
-    def cl_search(self):
+    def cl_search(self, q):
         time.sleep(.001)
         t0 = time.time()
         housing_dict = clsd.cat_dict
@@ -171,9 +157,8 @@ class ExecSearch:
                     if reg in self.regions or self.regions == []:
                         is_loop = True
                         self.timeout()
-                        if reg in Pickle().pickle_read('region') or reg in Pickle().pickle_read('temp_region'):
+                        if reg in Pickle().pickle_read('region'):
                             continue
-                        Pickle().pickle_dump('temp_region',reg)
                         for sub_reg in reg_name:
                             if sub_reg in Pickle().pickle_read('region'):
                                 continue
@@ -188,17 +173,15 @@ class ExecSearch:
                                     self.search_geotag(state, reg, cat, sub_reg)
                             if not is_loop:
                                 break
-                            Pickle().pickle_dump('region', sub_reg)
-                        Pickle().pickle_remove('temp_region', reg)    
-                    Pickle().pickle_dump('region', reg)
+                            q.put(['region', sub_reg])    
+                    q.put(['region', reg])
             state_items = list(eval(f'sr.{state}').items())
             random.shuffle(state_items)
             for reg, reg_name in state_items:
                 if reg in self.regions or self.regions == []:
                     self.timeout()
-                    if reg in Pickle().pickle_read('region') or reg in Pickle().pickle_read('temp_region'):
+                    if reg in Pickle().pickle_read('region'):
                         continue
-                    Pickle().pickle_dump('temp_region', reg)
                     try:
                         for cat in housing_dict:
                             if cat not in self.house_filter:
@@ -207,9 +190,8 @@ class ExecSearch:
                                 self.search_geotag(state, reg, cat)
                     except ValueError:
                         pass
-                    Pickle().pickle_remove('temp_region', reg)
-                Pickle().pickle_dump('region', reg)
-            Pickle().pickle_dump('state', state)
+                q.put(['region', reg])
+            q.put(['state', state])
         t1 = time.time()
         #print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
@@ -220,40 +202,45 @@ def list_shuffle(lst):
     return lst_2
 
 
-def handle_error(error):
+def handle_error(error): # do we really need this? - check
     print(f'There was an error:: {error} - nothing written to file.')
     logging.basicConfig(filename=f'{base_dir}/CL_Mining_Error.log', level = logging.INFO)
     logging.info(f'Time:: {datetime.datetime.today()}\nError:: {error}')
         
 
-def execute_search(state_list):
+def execute_search(state_list, q):
     search_criteria = ExecSearch(state_list, sk.dist_filters, sk.selected_reg, sk.selected_cat)
-    search_criteria.cl_search()  
+    search_criteria.cl_search(q)  
 
+
+def listener(q):
+    while True:
+        items = q.get()
+        category, item_to_write = items[0], items[1]
+        if category == 'kill':
+            break
+        Pickle().pickle_dump(category, item_to_write)
+            
 
 def main():
-    t0 = time.time()
+    manager = mp.Manager()
+    q = manager.Queue()    
+    pool = mp.Pool(mp.cpu_count() + 2)
 
-    pool = multiprocessing.Pool()
-    try:
-        for i in range(24):
-            pool.imap_unordered(execute_search, (list_shuffle(sk.state_keys),))
-    except Exception:
-        pool.close()
-        pool.terminate()
-    else:
-        pool.close()
-        pool.join()
+    watcher = pool.apply_async(listener, (q,))
 
-    '''pool = multiprocessing.Pool()
+    jobs = []
     for i in range(24):
-        pool.apply_async(execute_search, args = (list_shuffle(sk.state_keys), ))
-    pool.close()
-    pool.join()'''
+        job = pool.apply_async(execute_search, (list_shuffle(sk.state_keys), q))
+        jobs.append(job)
 
-    t1 = time.time()
-    delta_t = t1 - t0
-    print(f"Multiprocessing run time: {'%.2f' % (delta_t)} sec")
+    for job in jobs:
+        job.get()
+
+    q.put(['kill', 'now'])
+    pool.close()
+    pool.join()
+    print('process complete')
 
 
 if __name__ == '__main__':
@@ -265,6 +252,5 @@ if __name__ == '__main__':
         Pickle().pickle_dump('geotag',True)
     else:
         Pickle().pickle_dump('geotag',False)
-    Pickle().pickle_remove('temp_region', 'ALL')
     
     main()
