@@ -8,4 +8,16 @@
     <h1>Success!</h1>
 
     You have successfully placed your name.
+    <br>
+    <form action="{{ url_for('initial') }}" method="post">
+        <div class="form-group">
+                <input hidden class="form-control" name="state_id" value="{{ state.title() }}">
+                <input hidden class="form-control" name="district_id" value="{{ district.title() }}">
+                <input hidden class="form-control" name="name" value="{{ name.title() }}">
+        </div>
+        <br>
+        <div class="form-group">
+            <button class="btn btn-primary">Home</button>
+        </div>
+    </form>
 {% endblock %}
