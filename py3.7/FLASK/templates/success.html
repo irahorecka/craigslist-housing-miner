@@ -5,9 +5,18 @@
 {% endblock %}
 
 {% block body %}
+    <style>
+        h1 {
+            position: relative; 
+            top: 0px;
+            bottom: 0px;
+            color: #85037E;
+            font-family: "Ariel", serif;
+        }
+        </style>
     <h1>Success!</h1>
 
-    You have successfully placed your name.
+    You successfully placed your name!
     <br>
     <form action="{{ url_for('initial') }}" method="post">
         <div class="form-group">
@@ -17,7 +26,7 @@
         </div>
         <br>
         <div class="form-group">
-            <button class="btn btn-primary">Home</button>
+            <button class="btn btn-primary">home</button>
         </div>
     </form>
 {% endblock %}

@@ -6,15 +6,36 @@
 
 {% block body %}
     <!--<h2>Post Details</h2><br>-->
+    <style>
+        h3, h4 { 
+            position: relative; 
+            top: 0px;
+            bottom: 0px;
+            color: black;
+            font-family: "Ariel", serif;
+        }
+    </style>
     <br>
     <form action="{{ url_for('posts') }}" method="post">
-        <h4><a href= {{ post.url }}>{{ post.title.title() }}</a></h4>
+        <h4><a id='post-title' href= {{ post.url }}>{{ post.title.title() }}</a></h4>
         <br>
         <ul>
             <li><b>Cost:</b> {{ post.price }}</li>
-            <li><b>Bedrooms:</b> {{ post.bedrooms }}</li>
-            <li><b>Area:</b> {{ post.area[:-3] }} ft2</li>
-            <li><b>Location:</b> {{ post.location.title() }}, {{post.cl_state.title()}}</li>
+            {% if post.bedrooms != 'None' %}
+                <li><b>Bedrooms:</b> {{ post.bedrooms }}</li>
+            {% else %}
+                <li><b>Bedrooms:</b> N/A</li>
+            {% endif %}
+            {% if post.area[:-3] != 'N' %}
+                <li><b>Area:</b> {{ post.area[:-3] }} ft2</li>
+            {% else %}
+                <li><b>Area:</b> N/A</li>
+            {% endif %}
+            {% if post.location.title() != 'None' %}
+                <li><b>Location:</b> {{ post.location.title() }}, {{post.cl_state.title()}}</li>
+            {% else %}
+                <li><b>Location:</b> N/A</li>
+            {% endif %}
         </ul>
         <p>
             <b><u>Posting</u></b><br/>
@@ -23,8 +44,9 @@
             {% endautoescape %}
         </p>
         <div class="form-group">
-            <button name = "name" value = "{{post.id }} {{ name }} {{ state }} {{ district }}" class="btn btn-primary">Apply</button>
+            <button name = "name" value = "{{ post.id }}**{{ name }}**{{ state }}**{{ district }}" class="btn btn-primary">apply</button>
         </div>
+        <br>
         <h3>Candidates</h3>
         <ul>
             {% for passenger in passengers %}
@@ -33,6 +55,10 @@
                 <li>No names posted.</li>
             {% endfor %}
         </ul>
+        <br>
+        <br>
+        <br>
+        <br>
     </form>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from models import *
+from geomap import *
 from webscrape import *
 from sqlalchemy import func
 
@@ -17,17 +18,28 @@ def index():
 def initial():
     state = request.form.get('state_id')
     district = request.form.get("district_id")
-    print(state, district)
-    craigslist = Post.query.filter(func.lower(Post.cl_state)==func.lower(state)).filter(func.lower(Post.location).like("%"+func.lower(district)+"%")).order_by(Post.date_posted.desc()).limit(50)
+    print(district)
+    if district == '':
+        zoom = 5  
+    elif 'district' in district.lower():
+        print('true')
+        zoom = 14
+    else:
+        zoom = 11 
+    lng,lat = GeoMap(str(app), district, state).get_geotag() if district!= '' else GeoMap(str(app), state, 'United States').get_geotag()
+    if district != '':
+        craigslist = Post.query.filter(func.lower(Post.cl_state)==func.lower(state)).filter(func.lower(Post.location).like("%"+func.lower(district)+"%")).order_by(Post.date_posted.desc()).limit(50)
+    else:
+        craigslist = Post.query.filter(func.lower(Post.cl_state)==func.lower(state)).order_by(Post.date_posted.desc()).limit(50)
     """Jot a name."""
 
     # Get form information.
     name = request.form.get("name")
-    return render_template("initial.html", craigslist = craigslist, district = district, state = state, name = name)
+    return render_template("initial.html", craigslist=craigslist, district=district, state=state, name=name, lng=lng, lat=lat, map_zoom=zoom)
 
 @app.route("/post", methods=["POST"])
 def post():
-    var = (request.form.get("post_id").split(' '))
+    var = (request.form.get("post_id").split('**'))
     print(var, type(var))
     try:
         post_id = int(var[0])
@@ -46,7 +58,7 @@ def post():
 
 @app.route("/posts", methods=["POST"])
 def posts():
-    var = (request.form.get("name").split(' '))
+    var = (request.form.get("name").split('**'))
     print(var)
     try:
         post_id = int(var[0])
@@ -62,6 +74,18 @@ def posts():
     post.add_candidate(var[1].title()) #name
     return render_template('success.html', name = var[1], state = var[2], district = var[3])
     #return render_template("flight.html", post = post, name = var[1], passengers = passengers, test=return_body(post.url))
+
+
+
+
+
+
+
+
+
+
+
+
 
 '''@app.route("/posts/<int:post_id>")
 def post(post_id):

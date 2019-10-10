@@ -5,29 +5,91 @@
 {% endblock %}
 
 {% block body %}
-    {% if district == '' %}
-        <h1>Housing</h1>
-    {% else %}
-        <h1>Housing in {{ district.title() }}, {{ state.title() }}</h1>
-    {% endif %}
+    <style>
+        .form-group {
+            position: relative;
+            top: 35px;
+            bottom: 0px;
+        }
 
+        #googleMap {
+            height: 500px;
+            width: 700px;
+            font-weight: bold;
+            border: 2px solid #85037E;
+            padding: 20px;
+            margin: 0px;
+        }
+        h1 { 
+            position: relative; 
+            top: 15px;
+            bottom: 0px;
+            color: #85037E;
+            font-family: "Ariel", serif;
+        }
+        h4 {
+            position: relative;
+            bottom: 0px;
+            left: 0px;
+        }
+    </style>
+    {% if district == '' %}
+        <h1>Housing in {{ state.title().replace('_',' ') }}</h1>
+    {% else %}
+        <h1>Housing in {{ district.title() }}</h1>
+    {% endif %}
+    <!--<link rel="stylesheet" href="initial.css">-->
     <form action="{{ url_for('post') }}" method="post" >
             <div class="form-group">
                 <select class="form-control" name="post_id">
-                    {% for post in craigslist %}
-                        {% if post.bedrooms == '1' %}
-                            <option value="{{ post.id }} {{ name }} {{ state }} {{ district }}">{{ post.bedrooms }} bedroom for {{ post.price }}</option>
-                        {% elif post.bedrooms == 'None' %}
-                            <option value="{{ post.id }} {{ name }} {{ state }} {{ district }}">Unknown bedrooms for {{ post.price }}</option>
-                        {% else %}
-                            <option value="{{ post.id }} {{ name }} {{ state }} {{ district }}">{{ post.bedrooms }} bedrooms for {{ post.price }}</option>
-                        {% endif %}
-                    {% endfor %}
+                    {% if craigslist|list|length != 0 %} <!-- check length of craigslist query, if zip then print no post-->
+                        {% for post in craigslist %}
+                            {% if post.bedrooms == '1' %}
+                                <option value="{{ post.id }}**{{ name }}**{{ state }}**{{ district }}">{{ post.bedrooms }} bedroom for {{ post.price }}</option>
+                            {% elif post.bedrooms == 'None' %}
+                                {% if post.price != '$0' %}
+                                    <option value="{{ post.id }}**{{ name }}**{{ state }}**{{ district }}">housing for {{ post.price }}</option>
+                                {% else %}
+                                <option value="{{ post.id }}**{{ name }}**{{ state }}**{{ district }}">housing for free!</option>
+                                {% endif %}
+                            {% else %}
+                                <option value="{{ post.id }}**{{ name }}**{{ state }}**{{ district }}">{{ post.bedrooms }} bedrooms for {{ post.price }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <option value="">no postings found</option>
+                    {% endif %}
                 </select>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary">Search</button>
+                <button class="btn btn-primary">search</button>
             </div>
+            <br>
+            {% if lat != 'none' %}
+                <br>
+                {% if district == '' %}
+                    <h4>{{ state.title().replace('_',' ') }}</h4>
+                {% else %}
+                    <h4> {{ district.title() }}, {{ state.title().replace('_',' ') }}</h4>
+                {% endif %}
+                
+                <div id="googleMap"></div>
+
+                <script>
+                function myMap() {
+                    var mapProp= {
+                    center:new google.maps.LatLng({{ lng }}, {{ lat }}),
+                    zoom:{{ map_zoom }},
+                    };
+                    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+                    }
+                </script>
+
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdaMsCLps-ngRwsL8WT9QDH5tUJksjDdU&callback=myMap"></script>
+            {% else %}
+                <br>
+                <h4>Map temporarily unavailable</h4>
+            {% endif %}
         </form>
 
 {% endblock %}
