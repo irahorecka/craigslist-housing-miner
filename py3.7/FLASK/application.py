@@ -3,6 +3,7 @@ from models import *
 from geomap import *
 from webscrape import *
 from sqlalchemy import func
+import random
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -53,7 +54,8 @@ def post():
 
     # Add passenger.
     passengers = Users.query.filter_by(post_id=post_id).all()
-    return render_template("flight.html", post = post, name = var[1], passengers = passengers, test=return_body(post.url), state = var[2], district = var[3])
+    rand_int = random.randint(0,100000000000)
+    return render_template("flight.html", post = post, name = var[1], passengers = passengers, content = return_body(post.url), rand = rand_int, state = var[2], district = var[3])
 
 
 @app.route("/posts", methods=["POST"])

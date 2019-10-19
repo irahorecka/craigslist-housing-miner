@@ -7,7 +7,7 @@
 {% block body %}
     <!--<h2>Post Details</h2><br>-->
     <style>
-        h3, h4 { 
+        h4 { 
             position: relative; 
             top: 0px;
             bottom: 0px;
@@ -15,12 +15,12 @@
             font-family: "Ariel", serif;
         }
     </style>
-    <br>
+    <link rel= "stylesheet" href= "{{ url_for('static',filename='styles/test.css') }}?{{ rand }}">
     <form action="{{ url_for('posts') }}" method="post">
         <h4><a id='post-title' href= {{ post.url }}>{{ post.title.title() }}</a></h4>
-        <br>
+        <hr>
         <ul>
-            <li><b>Cost:</b> {{ post.price }}</li>
+                <li><b>Cost:</b> {{ post.price }}</li>
             {% if post.bedrooms != 'None' %}
                 <li><b>Bedrooms:</b> {{ post.bedrooms }}</li>
             {% else %}
@@ -32,33 +32,73 @@
                 <li><b>Area:</b> N/A</li>
             {% endif %}
             {% if post.location.title() != 'None' %}
-                <li><b>Location:</b> {{ post.location.title() }}, {{post.cl_state.title()}}</li>
+                <li><b>Location:</b> {{ post.location.title() }}</li>
             {% else %}
                 <li><b>Location:</b> N/A</li>
             {% endif %}
         </ul>
-        <p>
-            <b><u>Posting</u></b><br/>
-            {% autoescape false %}
-                {{ test | replace("n@nn@ih", "<br/>") }}
-            {% endautoescape %}
-        </p>
+        {% if content['imgs'] != None %}
+        <hr>
+            <div class='posting-images'>
+            <div class="slideshow-container">
+            {% for value in content['imgs'] %}
+            <div class="mySlides">
+                <div class="numbertext">{{loop.index}} / {{content['imgs']|length}}</div>
+                <img src='{{value}}' class=img_post>
+                <div class="text">Photo {{loop.index}}</div>
+            </div>
+            {% endfor %}
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>    
+            <div style="text-align:center">
+            {% for value in content['imgs'] %}
+                <span class="dot" onclick="currentSlide({{loop.index}})"></span> 
+            {% endfor %}
+            </div>
+            <script src="{{ url_for('static',filename='scripts/test.js') }}"></script>
+            </div>
+                {% if lat != None %} <!-- just one of the coord (lat) -->
+                <div id="googleMap"></div>
+                <script type="text/javascript"> var _lng = "{{ content['lon'] }}";
+                var _lat = "{{ content['lat'] }}"; 
+                var _title = "{{ post.location }}";</script>
+                <script type="text/javascript" src="{{ url_for('static',filename='scripts/google_map.js') }}?{{ rand }}"></script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdaMsCLps-ngRwsL8WT9QDH5tUJksjDdU&callback=myMap"></script>
+                {% else %}
+                    <br>
+                    <h4>Map temporarily unavailable</h4>
+                {% endif %}
+        {% else %}
+        {% endif %}
+        <section id='postingbody'>
+            <hr>
+            <p>
+                {% if content['body'] == 'This posting has been deleted by its author.' %}
+                    <b>{{ content['body'] }} </b>
+                {% else %}
+                {% autoescape false %}
+                    {{ content['body'] }}
+                {% endautoescape %}
+                {% endif %}
+            </p>
+        </section>
+        <hr>
         <div class="form-group">
             <button name = "name" value = "{{ post.id }}**{{ name }}**{{ state }}**{{ district }}" class="btn btn-primary">apply</button>
         </div>
         <br>
-        <h3>Candidates</h3>
+        <h4>Candidates</h4>
         <ul>
-            {% for passenger in passengers %}
-                <li>{{ passenger.name }}</li>
-            {% else %}
-                <li>No names posted.</li>
-            {% endfor %}
+        {% for passenger in passengers %}
+            <li>{{ passenger.name }}</li>
+        {% else %}
+            <li>No names posted.</li>
+        {% endfor %}
         </ul>
-        <br>
-        <br>
-        <br>
-        <br>
-    </form>
-
+    </form> 
+            
 {% endblock %}
+
+
