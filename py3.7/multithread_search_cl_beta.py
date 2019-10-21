@@ -9,7 +9,6 @@ import multiprocessing as mp
 from craigslist import CraigslistHousing
 from cl_information import Filters as clsd, States as sr #make better abbreviation later
 from search_information import SelectionKeys as sk
-import compile_info
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 #1) CATCH EXCEPTIONS AND RUN AGAIN
@@ -24,32 +23,35 @@ class CL_Housing_Select:
     def small_region(self):
         try:
             self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters)
-            print(self.inst_site, self.inst_category)
+            #print(self.inst_site, self.inst_category)
         except ConnectionError as e:
             handle_error(e)
             self.small_region()
+            print('small boy')
             #self.cl_instance = None
 
     def large_region(self, inst_area):
         try:
             self.cl_instance = CraigslistHousing(site=self.inst_site,category=self.inst_category,filters=self.inst_filters,area=inst_area)
-            print(self.inst_site, self.inst_category)
+            #print(self.inst_site, self.inst_category)
         except ConnectionError as e:
             handle_error(e)
+            print('large boy')
             self.large_region(inst_area)
             #self.cl_instance = None
 
     def exec_search(self, header_list, state, region, sub_region, category):
         try:
-            header_list.extend([f"{state.title()}{self.code_break}{region}{self.code_break}{sub_region}{self.code_break}{category}{self.code_break}{i['id']}{self.code_break}{i['repost_of']}{self.code_break}{i['name']}{self.code_break}{i['url']}{self.code_break}{i['datetime'][0:10]}{self.code_break}{i['datetime'][11:]}{self.code_break}{i['price']}{self.code_break}{i['where']}{self.code_break}{i['has_image']}{self.code_break}{i['geotag']}{self.code_break}{i['bedrooms']}{self.code_break}{i['area']}" for i in self.cl_instance.get_results(sort_by=None, geotagged=self.geotag, limit = 100)])
+            header_list.extend([f"{state.title()}{self.code_break}{region}{self.code_break}{sub_region}{self.code_break}{category}{self.code_break}{i['id']}{self.code_break}{i['repost_of']}{self.code_break}{i['name']}{self.code_break}{i['url']}{self.code_break}{i['datetime'][0:10]}{self.code_break}{i['datetime'][11:]}{self.code_break}{i['price']}{self.code_break}{i['where']}{self.code_break}{i['has_image']}{self.code_break}{i['geotag']}{self.code_break}{i['bedrooms']}{self.code_break}{i['area']}" for i in self.cl_instance.get_results(sort_by=None, geotagged=self.geotag, limit = None)])
             if len(header_list) == 1:
                 print(state, region, 'FAILED')
                 return None
             else:
-                print(len(header_list), state, region)
+                #print(len(header_list), state, region)
                 return header_list
         except (AttributeError, OSError) as e:
             handle_error(e)
+            print('exec_search done goofed')
             self.exec_search(header_list, state, region, sub_region, category)
             #return None
 
@@ -121,7 +123,7 @@ class ExecSearch:
             
 
     @my_logger
-    def cl_search(self, q, d):
+    def cl_search(self, q, d, t):
         housing_dict = clsd.cat_dict
         focus_list = []
         if self.zip_list != []:
@@ -136,7 +138,7 @@ class ExecSearch:
                     if reg in self.regions or self.regions == []:
                         is_loop = True
                         for sub_reg in reg_name:
-                            if (reg, sub_reg) in d['region']:
+                            if (reg, sub_reg) in d['region'] or (reg, sub_reg) in t['region']:
                                 continue
                             for cat in housing_dict:
                                 if cat not in self.house_filter:
@@ -146,12 +148,15 @@ class ExecSearch:
                                     is_loop = False
                                     break
                                 else:
+                                    print('t', t['region'])
+                                    print('d', d['region'])
+                                    q.put((reg, sub_reg, 'temp'))
                                     result = self.search_geotag(state, reg, cat, area = sub_reg, geotag=d['geotag'])
                             if not is_loop:
                                 break
                             if not result:
                                 continue
-                            q.put((reg, sub_reg))    
+                            q.put((reg, sub_reg, 'perm'))    
                         #q.put(reg)
             state_items = list(eval(f'sr.{state}').items())
             random.shuffle(state_items)
@@ -159,19 +164,22 @@ class ExecSearch:
                 if reg in focus_list:
                     continue
                 if reg in self.regions or self.regions == []:
-                    if (reg,) in d['region']:
+                    if (reg,) in d['region'] or (reg,) in t['region']:
                         continue
                     try:
                         for cat in housing_dict:
                             if cat not in self.house_filter:
                                 continue
                             else:
+                                q.put((reg, 'temp'))
+                                print('t', t['region'])
+                                print('d', d['region'])
                                 result = self.search_geotag(state, reg, cat, geotag=d['geotag'])
                     except ValueError:
                         pass
                     if not result:
                         continue
-                    q.put((reg,))
+                    q.put((reg, 'perm'))
         #print(f"Run time: {'%.2f' % (t1 - t0)} sec")
 
 
@@ -185,41 +193,55 @@ def handle_error(error): # do we really need this? - check
     print(f'There was an error:: {error} - nothing written to file.')
     logging.basicConfig(filename=f'{base_dir}/CL_Mining_Error.log', level = logging.INFO)
     logging.info(f'Time:: {datetime.datetime.today()}\nError:: {error}')
+    time.sleep(3) # if timeout incurs
         
 
-def execute_search(state_list, q, d):
+def execute_search(state_list, q, d, t):
     search_criteria = ExecSearch(state_list, sk.dist_filters, sk.selected_reg, sk.selected_cat)
-    search_criteria.cl_search(q, d)  
+    search_criteria.cl_search(q, d, t)  
 
 
-def listener(q, d):
+def listener(q, d, t):
     while True:
         item_to_write = q.get()
-        if item_to_write == 'kill':
+        if item_to_write[0] == 'kill':
             break
-        foo = d['region']
-        foo.add(item_to_write)
-        d['region'] = foo
-            
+        if item_to_write[-1] == 'temp':
+            foo = t['region'] 
+            foo.add(item_to_write[:-1])
+            t['region'] = foo
+        else:
+            foo = d['region']
+            foo.add(item_to_write[:-1])
+            d['region'] = foo
+
+            bar = t['region']
+            bar.remove(item_to_write[:-1])
+            t['region'] = bar
+        
+                
 
 def main(geotag):
     manager = mp.Manager()
     q = manager.Queue()    
     d = manager.dict()
+    t = manager.dict()
+    t['region'] = set()
     d['region'] = set()
     d['geotag'] = geotag
     pool = mp.Pool(mp.cpu_count() + 2)
-    watcher = pool.apply_async(listener, (q, d))
+    watcher = pool.apply_async(listener, (q, d, t))
 
     jobs = []
     for i in range(24):
-        job = pool.apply_async(execute_search, (list_shuffle(sk.state_keys), q, d))
+        job = pool.apply_async(execute_search, (sk.state_keys, q, d, t))
         jobs.append(job)
 
     for job in jobs:
         job.get()
+        time.sleep(.05)
 
-    q.put('kill')
+    q.put(('kill', 'perm'))
     pool.close()
     pool.join()
     #make a final linear run on one core
