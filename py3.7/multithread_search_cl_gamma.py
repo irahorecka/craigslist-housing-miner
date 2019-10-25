@@ -92,7 +92,7 @@ class CLHousingSelect:
         else:
             pass
         os.chdir(new_dir)
-        title = f"{date}_geotag_{self.geotag}_all_craigslist_housing_{inst_site_name}_{inst_state_name.title()}.csv"
+        title = f"{date}_geotag_{self.geotag}_craigslist_{self.inst_category}_{inst_site_name}_{inst_state_name.title()}.csv"
         with open(title, 'w', newline='') as rm_csv:
             writer = csv.writer(rm_csv, delimiter=',')
             try:
@@ -123,10 +123,11 @@ class ExecSearch:
     search information into a format compatible with
     python-craigslist module. This class operates closely
     with CLHousingSelect. """
-    def __init__(self, house_filter):
+    def __init__(self, house_filter, q, d):
+        self.q = q
+        self.d = d
         self.house_filter = house_filter  # (e.g. 'apa' or 'roo')
         self.room_filter = {**clsd.extra_filters, **clsd.distance_filters}
-        self.continental_us = Search.continental_us
         self.code_break = ';n@nih;'
         self.header = [
             f"CL State{self.code_break}CL Region{self.code_break}"
@@ -172,44 +173,37 @@ class ExecSearch:
         else:
             return 'OK'
 
-    def site(self, tup, housing_dict, q, d):
+    def site(self, tup, housing_dict):
         state, reg = tup[0], tup[1]
         for cat in housing_dict:
             if cat not in self.house_filter:
                 continue
             else:
                 result = self.search_geotag(
-                    state, reg, cat, _geotag=d['geotag']
+                    state, reg, cat, _geotag=self.d['geotag']
                     )
             if not result:
                 continue
-            q.put(tup)
 
-    def area(self, tup, housing_dict, q, d):
+    def area(self, tup, housing_dict):
         state, reg, sub_reg = tup[0], tup[1], tup[2]
         for cat in housing_dict:
             if cat not in self.house_filter:
                 continue
             else:
                 result = self.search_geotag(
-                    state, reg, cat, area=sub_reg, _geotag=d['geotag']
+                    state, reg, cat, area=sub_reg, _geotag=self.d['geotag']
                     )
             if not result:
                 continue
-            q.put(tup)
 
     @my_logger
-    def cl_search(self, q, d):
+    def cl_search(self, tup):
         housing_dict = clsd.cat_dict
-        random.shuffle(self.continental_us)
-        for tup in self.continental_us:
-            if tup not in d['region']:
-                if len(tup) == 3:
-                    self.area(tup, housing_dict, q, d)
-                else:
-                    self.site(tup, housing_dict, q, d)
-            else:
-                pass
+        if len(tup) == 3:
+            self.area(tup, housing_dict)
+        else:
+            self.site(tup, housing_dict)
 
 
 def handle_error(error):
@@ -221,21 +215,9 @@ def handle_error(error):
     time.sleep(5)  # provide 5 sec wait time before continuing search
 
 
-def execute_search(q, d):
-    search_criteria = ExecSearch(sk.selected_cat)
-    search_criteria.cl_search(q, d)
-
-
-def listener(q, d, stop_event):
-    while not stop_event.is_set():
-        try:
-            item_to_write = q.get(timeout=0.1)
-            foo = d['region']
-            foo.add(item_to_write)
-            d['region'] = foo
-        except queue.Empty:
-            pass
-        print("Listener process stopped")
+def execute_search(i, q, d):
+    search_criteria = ExecSearch(sk.selected_cat, q, d)
+    search_criteria.cl_search(i)
 
 
 def main(_geotag):
@@ -243,21 +225,17 @@ def main(_geotag):
     stop_event = manager.Event()
     q = manager.Queue()
     d = manager.dict()
-    d['region'] = set()
     d['geotag'] = _geotag
-    pool = mp.get_context("spawn").Pool(mp.cpu_count() + 2) # spawn?
-    watcher = pool.apply_async(listener, (q, d, stop_event))
-    stop_event.set()
+    pool = mp.Pool(mp.cpu_count() + 2) # spawn?
     jobs = []
-    for i in range(24):
-        job = pool.apply_async(execute_search, (q, d))
+    for i in Search.continental_us:
+        job = pool.apply_async(execute_search, (i, q, d))
         jobs.append(job)
     try:
         for job in jobs:
             job.get(300) # timeout after 300 sec
     except mp.TimeoutError:
         pool.terminate()
-    stop_event.set() # stop listener
     print('process complete')
 
 
