@@ -218,19 +218,6 @@ def handle_error(error):
 def execute_search(i, q, d):
     search_criteria = ExecSearch(sk.selected_cat, q, d)
     search_criteria.cl_search(i)
-<<<<<<< HEAD
-=======
-
-
-def listener(q, d, stop_event):
-    while not stop_event.is_set():
-        try:
-           exc_tup = q.get(timeout=0.1)
-           execute_search(exc_tup, q, d)
-        except queue.Empty:
-            pass
-    print("Listener process stopped")
->>>>>>> 6b68b281f7f89261d3bc6ad4238de822f7a3465c
 
 
 def main(_geotag):
