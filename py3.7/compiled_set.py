@@ -1,7 +1,6 @@
 class Search:
-    continental_us = [('alabama', 'auburn'),
+    united_states = [('alabama', 'auburn'),
         ('alabama', 'bham'),
-        ('alabama', 'columbusga'),
         ('alabama', 'dothan'),
         ('alabama', 'gadsden'),
         ('alabama', 'huntsville'),
@@ -9,9 +8,16 @@ class Search:
         ('alabama', 'montgomery'),
         ('alabama', 'shoals'),
         ('alabama', 'tuscaloosa'),
+        ('alaska', 'anchorage'),
+        ('alaska', 'fairbanks'),
+        ('alaska', 'juneau'),
+        ('alaska', 'kenai'),
         ('arizona', 'flagstaff'),
         ('arizona', 'mohave'),
-        ('arizona', 'phoenix'),
+        ('arizona', 'phoenix', 'cph'),
+        ('arizona', 'phoenix', 'evl'),
+        ('arizona', 'phoenix', 'nph'),
+        ('arizona', 'phoenix', 'wvl'),
         ('arizona', 'prescott'),
         ('arizona', 'showlow'),
         ('arizona', 'sierravista'),
@@ -21,7 +27,6 @@ class Search:
         ('arkansas', 'fortsmith'),
         ('arkansas', 'jonesboro'),
         ('arkansas', 'littlerock'),
-        ('arkansas', 'memphis'),
         ('arkansas', 'texarkana'),
         ('california', 'bakersfield'),
         ('california', 'chico'),
@@ -44,7 +49,6 @@ class Search:
         ('california', 'orangecounty'),
         ('california', 'palmsprings'),
         ('california', 'redding'),
-        ('california', 'reno'),
         ('california', 'sacramento'),
         ('california', 'sandiego', 'csd'),
         ('california', 'sandiego', 'esd'),
@@ -76,16 +80,17 @@ class Search:
         ('connecticut', 'hartford'),
         ('connecticut', 'newhaven'),
         ('connecticut', 'newlondon'),
-        ('connecticut', 'newyork', 'fct'),
         ('connecticut', 'nwct'),
         ('delaware', 'delaware'),
         ('district_of_columbia', 'washingtondc'),
         ('florida', 'cfl'),
         ('florida', 'daytona'),
+        ('florida', 'fortlauderdale', 'brw'),
+        ('florida', 'fortlauderdale', 'mdc'),
+        ('florida', 'fortlauderdale', 'pbc'),
         ('florida', 'fortmyers', 'chl'),
         ('florida', 'fortmyers', 'col'),
         ('florida', 'fortmyers', 'lee'),
-        ('florida', 'gadsden'),
         ('florida', 'gainesville'),
         ('florida', 'jacksonville'),
         ('florida', 'keys'),
@@ -93,7 +98,6 @@ class Search:
         ('florida', 'lakeland'),
         ('florida', 'miami', 'brw'),
         ('florida', 'miami', 'mdc'),
-        ('florida', 'miami', 'pbc'),
         ('florida', 'ocala'),
         ('florida', 'okaloosa'),
         ('florida', 'orlando'),
@@ -123,11 +127,10 @@ class Search:
         ('georgia', 'savannah'),
         ('georgia', 'statesboro'),
         ('georgia', 'valdosta'),
+        ('hawaii', 'honolulu'),
         ('idaho', 'boise'),
         ('idaho', 'eastidaho'),
         ('idaho', 'lewiston'),
-        ('idaho', 'pullman'),
-        ('idaho', 'spokane'),
         ('idaho', 'twinfalls'),
         ('illinois', 'bn'),
         ('illinois', 'carbondale'),
@@ -142,13 +145,10 @@ class Search:
         ('illinois', 'lasalle'),
         ('illinois', 'mattoon'),
         ('illinois', 'peoria'),
-        ('illinois', 'quadcities'),
         ('illinois', 'quincy'),
         ('illinois', 'rockford'),
         ('illinois', 'springfieldil'),
-        ('illinois', 'stlouis'),
         ('indiana', 'bloomington'),
-        ('indiana', 'chicago', 'nwi'),
         ('indiana', 'evansville'),
         ('indiana', 'fortwayne'),
         ('indiana', 'indianapolis'),
@@ -165,12 +165,10 @@ class Search:
         ('iowa', 'fortdodge'),
         ('iowa', 'iowacity'),
         ('iowa', 'masoncity'),
-        ('iowa', 'omaha'),
         ('iowa', 'ottumwa'),
         ('iowa', 'quadcities'),
         ('iowa', 'siouxcity'),
         ('iowa', 'waterloo'),
-        ('kansas', 'kansascity'),
         ('kansas', 'ksu'),
         ('kansas', 'lawrence'),
         ('kansas', 'nwks'),
@@ -180,9 +178,7 @@ class Search:
         ('kansas', 'topeka'),
         ('kansas', 'wichita'),
         ('kentucky', 'bgky'),
-        ('kentucky', 'cincinnati'),
         ('kentucky', 'eastky'),
-        ('kentucky', 'huntington'),
         ('kentucky', 'lexington'),
         ('kentucky', 'louisville'),
         ('kentucky', 'owensboro'),
@@ -198,11 +194,9 @@ class Search:
         ('maine', 'maine'),
         ('maryland', 'annapolis'),
         ('maryland', 'baltimore'),
-        ('maryland', 'chambersburg'),
         ('maryland', 'easternshore'),
         ('maryland', 'frederick'),
         ('maryland', 'smd'),
-        ('maryland', 'washingtondc'),
         ('maryland', 'westmd'),
         ('massachusetts', 'boston', 'bmw'),
         ('massachusetts', 'boston', 'gbs'),
@@ -236,7 +230,6 @@ class Search:
         ('minnesota', 'bemidji'),
         ('minnesota', 'brainerd'),
         ('minnesota', 'duluth'),
-        ('minnesota', 'fargo'),
         ('minnesota', 'mankato'),
         ('minnesota', 'marshall'),
         ('minnesota', 'minneapolis', 'ank'),
@@ -250,7 +243,6 @@ class Search:
         ('mississippi', 'gulfport'),
         ('mississippi', 'hattiesburg'),
         ('mississippi', 'jackson'),
-        ('mississippi', 'memphis'),
         ('mississippi', 'meridian'),
         ('mississippi', 'natchez'),
         ('mississippi', 'northmiss'),
@@ -276,7 +268,6 @@ class Search:
         ('nebraska', 'northplatte'),
         ('nebraska', 'omaha'),
         ('nebraska', 'scottsbluff'),
-        ('nebraska', 'siouxcity'),
         ('nevada', 'elko'),
         ('nevada', 'lasvegas'),
         ('nevada', 'reno'),
@@ -284,7 +275,6 @@ class Search:
         ('new_jersey', 'cnj'),
         ('new_jersey', 'jerseyshore'),
         ('new_jersey', 'newjersey'),
-        ('new_jersey', 'newyork', 'jsy'),
         ('new_jersey', 'southjersey'),
         ('new_mexico', 'albuquerque'),
         ('new_mexico', 'clovis'),
@@ -335,7 +325,6 @@ class Search:
         ('north_dakota', 'bismarck'),
         ('north_dakota', 'fargo'),
         ('north_dakota', 'grandforks'),
-        ('north_dakota', 'minneapolis'),
         ('north_dakota', 'nd'),
         ('ohio', 'akroncanton'),
         ('ohio', 'ashtabula'),
@@ -345,22 +334,17 @@ class Search:
         ('ohio', 'cleveland'),
         ('ohio', 'columbus'),
         ('ohio', 'dayton'),
-        ('ohio', 'huntington'),
         ('ohio', 'limaohio'),
         ('ohio', 'mansfield'),
-        ('ohio', 'parkersburg'),
         ('ohio', 'sandusky'),
         ('ohio', 'toledo'),
         ('ohio', 'tuscarawas'),
-        ('ohio', 'wheeling'),
         ('ohio', 'youngstown'),
         ('ohio', 'zanesville'),
-        ('oklahoma', 'fortsmith'),
+        ('oklahoma', 'enid'),
         ('oklahoma', 'lawton'),
-        ('oklahoma', 'nwks'),
         ('oklahoma', 'oklahomacity'),
         ('oklahoma', 'stillwater'),
-        ('oklahoma', 'texoma'),
         ('oklahoma', 'tulsa'),
         ('oregon', 'bend'),
         ('oregon', 'corvallis'),
@@ -391,7 +375,6 @@ class Search:
         ('pennsylvania', 'poconos'),
         ('pennsylvania', 'reading'),
         ('pennsylvania', 'scranton'),
-        ('pennsylvania', 'twintiers'),
         ('pennsylvania', 'williamsport'),
         ('pennsylvania', 'york'),
         ('rhode_island', 'providence'),
@@ -402,7 +385,6 @@ class Search:
         ('south_carolina', 'hiltonhead'),
         ('south_carolina', 'myrtlebeach'),
         ('south_dakota', 'csd'),
-        ('south_dakota', 'nd'),
         ('south_dakota', 'nesd'),
         ('south_dakota', 'rapidcity'),
         ('south_dakota', 'sd'),
@@ -442,7 +424,6 @@ class Search:
         ('texas', 'sanangelo'),
         ('texas', 'sanantonio'),
         ('texas', 'sanmarcos'),
-        ('texas', 'texarkana'),
         ('texas', 'texoma'),
         ('texas', 'victoriatx'),
         ('texas', 'waco'),
@@ -456,7 +437,6 @@ class Search:
         ('virginia', 'blacksburg'),
         ('virginia', 'charlottesville'),
         ('virginia', 'danville'),
-        ('virginia', 'easternshore'),
         ('virginia', 'fredericksburg'),
         ('virginia', 'harrisonburg'),
         ('virginia', 'lynchburg'),
@@ -464,20 +444,11 @@ class Search:
         ('virginia', 'richmond'),
         ('virginia', 'roanoke'),
         ('virginia', 'swva'),
-        ('virginia', 'washingtondc'),
         ('virginia', 'winchester'),
         ('washington', 'bellingham'),
         ('washington', 'kpr'),
-        ('washington', 'lewiston'),
         ('washington', 'moseslake'),
         ('washington', 'olympic'),
-        ('washington', 'portland', 'clc'),
-        ('washington', 'portland', 'clk'),
-        ('washington', 'portland', 'grg'),
-        ('washington', 'portland', 'mlt'),
-        ('washington', 'portland', 'nco'),
-        ('washington', 'portland', 'wsc'),
-        ('washington', 'portland', 'yam'),
         ('washington', 'pullman'),
         ('washington', 'seattle', 'est'),
         ('washington', 'seattle', 'kit'),
@@ -499,7 +470,6 @@ class Search:
         ('west_virginia', 'wheeling'),
         ('west_virginia', 'wv'),
         ('wisconsin', 'appleton'),
-        ('wisconsin', 'duluth'),
         ('wisconsin', 'eauclaire'),
         ('wisconsin', 'greenbay'),
         ('wisconsin', 'janesville'),
@@ -511,3 +481,385 @@ class Search:
         ('wisconsin', 'sheboygan'),
         ('wisconsin', 'wausau'),
         ('wyoming', 'wyoming')]
+
+    canada = [('alberta', 'calgary'),
+        ('alberta', 'edmonton'),
+        ('alberta', 'ftmcmurray'),
+        ('alberta', 'hat'),
+        ('alberta', 'lethbridge'),
+        ('alberta', 'peace'),
+        ('alberta', 'reddeer'),
+        ('british_columbia', 'abbotsford'),
+        ('british_columbia', 'cariboo'),
+        ('british_columbia', 'comoxvalley'),
+        ('british_columbia', 'kamloops'),
+        ('british_columbia', 'kelowna'),
+        ('british_columbia', 'kootenays'),
+        ('british_columbia', 'nanaimo'),
+        ('british_columbia', 'princegeorge'),
+        ('british_columbia', 'skeena'),
+        ('british_columbia', 'sunshine'),
+        ('british_columbia', 'vancouver', 'bnc'),
+        ('british_columbia', 'vancouver', 'nvn'),
+        ('british_columbia', 'vancouver', 'pml'),
+        ('british_columbia', 'vancouver', 'rch'),
+        ('british_columbia', 'vancouver', 'rds'),
+        ('british_columbia', 'vancouver', 'van'),
+        ('british_columbia', 'victoria'),
+        ('british_columbia', 'whistler'),
+        ('manitoba', 'winnipeg'),
+        ('new_brunswick', 'newbrunswick'),
+        ('newfoundland_and_labrador', 'newfoundland'),
+        ('northwest_territories', 'territories'),
+        ('northwest_territories', 'yellowknife'),
+        ('nova_scotia', 'halifax'),
+        ('ontario', 'barrie'),
+        ('ontario', 'belleville'),
+        ('ontario', 'brantford'),
+        ('ontario', 'chatham'),
+        ('ontario', 'cornwall'),
+        ('ontario', 'guelph'),
+        ('ontario', 'hamilton'),
+        ('ontario', 'kingston'),
+        ('ontario', 'kitchener'),
+        ('ontario', 'londonon'),
+        ('ontario', 'niagara'),
+        ('ontario', 'ottawa'),
+        ('ontario', 'owensound'),
+        ('ontario', 'peterborough'),
+        ('ontario', 'sarnia'),
+        ('ontario', 'soo'),
+        ('ontario', 'sudbury'),
+        ('ontario', 'thunderbay'),
+        ('ontario', 'toronto', 'bra'),
+        ('ontario', 'toronto', 'drh'),
+        ('ontario', 'toronto', 'mss'),
+        ('ontario', 'toronto', 'oak'),
+        ('ontario', 'toronto', 'tor'),
+        ('ontario', 'toronto', 'yrk'),
+        ('ontario', 'windsor'),
+        ('prince_edward_island', 'pei'),
+        ('quebec', 'montreal'),
+        ('quebec', 'quebec'),
+        ('quebec', 'saguenay'),
+        ('quebec', 'sherbrooke'),
+        ('quebec', 'troisrivieres'),
+        ('saskatchewan', 'regina'),
+        ('saskatchewan', 'saskatoon'),
+        ('yukon_territory', 'whitehorse')]
+
+    territories = [('territories', 'micronesia'),
+        ('territories', 'puertorico'),
+        ('territories', 'virgin')]
+
+    austria = [('austria', 'vienna')]
+
+    blegium = [('belgium', 'brussels')]
+
+    bulgaria = [('bulgaria', 'bulgaria')]
+
+    croatia = [('croatia', 'zagreb')]
+
+    czech_republic = [('czech_republic', 'prague')]
+
+    denmar = [('denmark', 'copenhagen')]
+
+    finland = [('finland', 'helsinki')]
+
+    france = [('france', 'bordeaux'),
+        ('france', 'cotedazur'),
+        ('france', 'grenoble'),
+        ('france', 'lille'),
+        ('france', 'loire'),
+        ('france', 'lyon'),
+        ('france', 'marseilles'),
+        ('france', 'montpellier'),
+        ('france', 'paris'),
+        ('france', 'rennes'),
+        ('france', 'rouen'),
+        ('france', 'strasbourg'),
+        ('france', 'toulouse')]
+
+    germany = [('germany', 'berlin'),
+        ('germany', 'bremen'),
+        ('germany', 'cologne'),
+        ('germany', 'dresden'),
+        ('germany', 'dusseldorf'),
+        ('germany', 'essen'),
+        ('germany', 'frankfurt'),
+        ('germany', 'hamburg'),
+        ('germany', 'hannover'),
+        ('germany', 'heidelberg'),
+        ('germany', 'kaiserslautern'),
+        ('germany', 'leipzig'),
+        ('germany', 'munich'),
+        ('germany', 'nuremberg'),
+        ('germany', 'stuttgart')]
+
+    greece = [('greece', 'athens')]
+
+    hungary = [('hungary', 'budapest')]
+
+    iceland = [('iceland', 'reykjavik')]
+
+    ireland = [('ireland', 'dublin')]
+
+    italy = [('italy', 'bologna'),
+        ('italy', 'florence'),
+        ('italy', 'genoa'),
+        ('italy', 'milan'),
+        ('italy', 'naples'),
+        ('italy', 'perugia'),
+        ('italy', 'rome'),
+        ('italy', 'sardinia'),
+        ('italy', 'sicily'),
+        ('italy', 'torino'),
+        ('italy', 'venice')]
+
+    luxembourg = [('luxembourg', 'luxembourg')]
+
+    netherlands = [('netherlands', 'amsterdam')]
+    
+    norway = [('norway', 'oslo')]
+    
+    poland = [('poland', 'warsaw')]
+
+    portugal = [('portugal', 'faro'), ('portugal', 'lisbon'), ('portugal', 'porto')]
+    
+    romania = [('romania', 'bucharest')]
+
+    russia = [('russian_federation', 'stpetersburg'), ('russian_federation', 'moscow')]
+
+    spain = [('spain', 'alicante'),
+        ('spain', 'baleares'),
+        ('spain', 'barcelona'),
+        ('spain', 'bilbao'),
+        ('spain', 'cadiz'),
+        ('spain', 'canarias'),
+        ('spain', 'granada'),
+        ('spain', 'madrid'),
+        ('spain', 'malaga'),
+        ('spain', 'sevilla'),
+        ('spain', 'valencia')]
+        
+    sweden = [('sweden', 'stockholm')]
+    
+    switzerland = [('switzerland', 'basel'),
+        ('switzerland', 'bern'),
+        ('switzerland', 'geneva'),
+        ('switzerland', 'lausanne'),
+        ('switzerland', 'zurich')]
+        
+    turkey = [('turkey', 'istanbul')]
+    
+    ukraine = [('ukraine', 'ukraine')]
+    
+    united_kingdom = [('united_kingdom', 'aberdeen'),
+        ('united_kingdom', 'bath'),
+        ('united_kingdom', 'belfast'),
+        ('united_kingdom', 'birmingham'),
+        ('united_kingdom', 'brighton'),
+        ('united_kingdom', 'bristol'),
+        ('united_kingdom', 'cambridge'),
+        ('united_kingdom', 'cardiff'),
+        ('united_kingdom', 'coventry'),
+        ('united_kingdom', 'derby'),
+        ('united_kingdom', 'devon'),
+        ('united_kingdom', 'dundee'),
+        ('united_kingdom', 'eastmids'),
+        ('united_kingdom', 'edinburgh'),
+        ('united_kingdom', 'essex'),
+        ('united_kingdom', 'glasgow'),
+        ('united_kingdom', 'hampshire'),
+        ('united_kingdom', 'kent'),
+        ('united_kingdom', 'leeds'),
+        ('united_kingdom', 'liverpool'),
+        ('united_kingdom', 'london'),
+        ('united_kingdom', 'manchester'),
+        ('united_kingdom', 'newcastle'),
+        ('united_kingdom', 'norwich'),
+        ('united_kingdom', 'nottingham'),
+        ('united_kingdom', 'oxford'),
+        ('united_kingdom', 'sheffield')]
+        
+    bangladesh = [('bangladesh', 'bangladesh')]
+    
+    china = [('china', 'beijing'),
+        ('china', 'chengdu'),
+        ('china', 'chongqing'),
+        ('china', 'dalian'),
+        ('china', 'guangzhou'),
+        ('china', 'hangzhou'),
+        ('china', 'nanjing'),
+        ('china', 'shanghai'),
+        ('china', 'shenyang'),
+        ('china', 'shenzhen'),
+        ('china', 'wuhan'),
+        ('china', 'xian')]
+        
+    guam_micronesia = [('guam_micronesia', 'micronesia')]
+
+    hong_kong = [('hong_kong', 'hongkong')]
+    
+    india = [('india', 'ahmedabad'),
+        ('india', 'bangalore'),
+        ('india', 'bhubaneswar'),
+        ('india', 'chandigarh'),
+        ('india', 'chennai'),
+        ('india', 'delhi'),
+        ('india', 'goa'),
+        ('india', 'hyderabad'),
+        ('india', 'indore'),
+        ('india', 'jaipur'),
+        ('india', 'kerala'),
+        ('india', 'kolkata'),
+        ('india', 'lucknow'),
+        ('india', 'mumbai'),
+        ('india', 'pune'),
+        ('india', 'surat')]
+        
+    indonesia = [('indonesia', 'jakarta')]
+    
+    iran = [('iran', 'tehran')]
+
+    iraq = [('iraq', 'baghdad')]
+    
+    israel_and_palestine = [('israel_and_palestine', 'haifa'),
+        ('israel_and_palestine', 'jerusalem'),
+        ('israel_and_palestine', 'ramallah'),
+        ('israel_and_palestine', 'telaviv')]
+
+    japan = [('japan', 'fukuoka'),
+        ('japan', 'hiroshima'),
+        ('japan', 'nagoya'),
+        ('japan', 'okinawa'),
+        ('japan', 'osaka'),
+        ('japan', 'sapporo'),
+        ('japan', 'sendai'),
+        ('japan', 'tokyo')]
+
+    korea = [('korea', 'seoul')]
+    
+    kuwait = [('kuwait', 'kuwait')]
+    
+    lebanon = [('lebanon', 'beirut')]
+    
+    malaysia = [('malaysia', 'malaysia')]
+    
+    pakistan = [('pakistan', 'pakistan')]
+    
+    philippines = [('philippines', 'bacolod'),
+        ('philippines', 'cdo'),
+        ('philippines', 'cebu'),
+        ('philippines', 'davaocity'),
+        ('philippines', 'iloilo'),
+        ('philippines', 'manila'),
+        ('philippines', 'naga'),
+        ('philippines', 'pampanga'),
+        ('philippines', 'zamboanga')]
+
+    singapore = [('singapore', 'singapore')]
+
+    taiwan = [('taiwan', 'taipei')]
+
+    thailand = [('thailand', 'bangkok')]
+    
+    united_arab_emirates = [('united_arab_emirates', 'dubai')]
+    
+    vietnam = [('vietnam', 'vietnam')]
+    
+    austria = [('australia', 'adelaide'),
+        ('australia', 'brisbane'),
+        ('australia', 'cairns'),
+        ('australia', 'canberra'),
+        ('australia', 'darwin'),
+        ('australia', 'goldcoast'),
+        ('australia', 'hobart'),
+        ('australia', 'melbourne'),
+        ('australia', 'ntl'),
+        ('australia', 'perth'),
+        ('australia', 'sydney'),
+        ('australia', 'wollongong')]
+        
+    new_zealand = [('new_zealand', 'auckland'),
+        ('new_zealand', 'christchurch'),
+        ('new_zealand', 'dunedin'),
+        ('new_zealand', 'wellington')]
+        
+    argentina = [('argentina', 'buenosaires')]
+    
+    bolivia = [('bolivia', 'lapaz')]
+    
+    brazil = [('brazil', 'belohorizonte'),
+        ('brazil', 'brasilia'),
+        ('brazil', 'curitiba'),
+        ('brazil', 'fortaleza'),
+        ('brazil', 'portoalegre'),
+        ('brazil', 'recife'),
+        ('brazil', 'rio'),
+        ('brazil', 'salvador'),
+        ('brazil', 'saopaulo')]
+
+    caribbean_islands = [('caribbean_islands', 'caribbean')]
+
+    chile = [('chile', 'santiago')]
+
+    colombia = [('colombia', 'colombia')]
+
+    costa_rica = [('costa_rica', 'costarica')]
+
+    dominican_republic = [('dominican_republic', 'santodomingo')]
+
+    ecuador = [('ecuador', 'quito')]
+
+    el_salvador = [('el_salvador', 'elsalvador')]
+
+    guatemala = [('guatemala', 'guatemala')]
+
+    mexico = [('mexico', 'yucatan'),
+        ('mexico', 'acapulco'),
+        ('mexico', 'puebla'),
+        ('mexico', 'oaxaca'),
+        ('mexico', 'pv'),
+        ('mexico', 'chihuahua'),
+        ('mexico', 'veracruz'),
+        ('mexico', 'guanajuato'),
+        ('mexico', 'tijuana'), 
+        ('mexico', 'mazatlan'),
+        ('mexico', 'guadalajara'),
+        ('mexico', 'monterrey'),
+        ('mexico', 'bajasur'),
+        ('mexico', 'mexicocity'),
+        ('mexico', 'hermosillo'),
+        ('mexico', 'juarez')]
+
+    nicaragua = [('nicaragua', 'managua')]
+
+    panama = [('panama', 'panama')]
+
+    peru = [('peru', 'lima')]
+
+    puerto_rico = [('puerto_rico', 'puertorico')]
+
+    uruguay = [('uruguay', 'montevideo')]
+
+    venezuela = [('venezuela', 'caracas')]
+
+    virgin_islands_us = [('virgin_islands_us', 'virgin')]
+
+    egypt = [('egypt', 'cairo')]
+
+    ethiopia = [('ethiopia', 'addisababa')]
+
+    ghana = [('ghana', 'accra')]
+
+    kenya = [('kenya', 'kenya')]
+
+    morocco = [('morocco', 'casablanca')]
+
+    south_africa = [('south_africa', 'johannesburg'),
+        ('south_africa', 'pretoria'),
+        ('south_africa', 'durban'),
+        ('south_africa', 'capetown')]
+
+    tunisia = [('tunisia', 'tunis')]
