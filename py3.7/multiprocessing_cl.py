@@ -142,7 +142,7 @@ class ExecSearch:
             ]
 
     def search_package(self, state,
-                       reg, cat, _geotag, area):
+                       reg, cat, _geotag, area=""):
         header_list = copy.deepcopy(self.header)
         housing_result = CLHousingSelect(
             cat, self.room_filter, self.code_break, _geotag
@@ -166,21 +166,13 @@ class ExecSearch:
         except AttributeError:
             pass
 
-    def search_geotag(self, state, reg,
-                      cat, _geotag, area=''):
-        result = self.search_package(state, reg, cat, _geotag, area)
-        if not result:
-            return None
-        else:
-            return 'OK'
-
     def site(self, tup, housing_dict):
         state, reg = tup[0], tup[1]
         for cat in housing_dict:
             if cat not in self.house_filter:
                 continue
             else:
-                result = self.search_geotag(
+                result = self.search_package(
                     state, reg, cat, _geotag=self.d['geotag']
                     )
             if not result:
@@ -192,7 +184,7 @@ class ExecSearch:
             if cat not in self.house_filter:
                 continue
             else:
-                result = self.search_geotag(
+                result = self.search_package(
                     state, reg, cat, area=sub_reg, _geotag=self.d['geotag']
                     )
             if not result:
