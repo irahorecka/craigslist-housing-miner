@@ -8,6 +8,7 @@ import datetime
 import time
 import logging
 import os
+import pandas as pd
 import random
 import multiprocessing as mp
 import queue
@@ -16,6 +17,7 @@ from cl_information import Filters as clsd
 from search_information import SelectionKeys as sk
 from compiled_set import Search
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = f"{BASE_DIR}/Data/{datetime.date.today()}"
 """
 2019-10-21 develop temp global dict
 to omit repetition of search param
@@ -28,8 +30,9 @@ class CLHousingSelect:
     encompasses methods to set search instance, execute
     search, and write search information to .csv files. """
 
-    def __init__(self, inst_category,
+    def __init__(self, country, inst_category,
                  inst_filters, code_break, _geotag):
+        self.country = country
         self.inst_category = inst_category
         self.inst_filters = inst_filters
         self.code_break = code_break
@@ -61,7 +64,7 @@ class CLHousingSelect:
                      state, region, sub_region, category):
         try:
             header_list.extend(
-                [f"{state.title()}{self.code_break}{region}{self.code_break}"
+                [f"{self.country}{self.code_break}{state}{self.code_break}{region}{self.code_break}"
                  f"{sub_region}{self.code_break}{category}{self.code_break}"
                  f"{i['id']}{self.code_break}{i['repost_of']}{self.code_break}"
                  f"{i['name']}{self.code_break}{i['url']}{self.code_break}"
@@ -72,11 +75,11 @@ class CLHousingSelect:
                  for i in self.cl_instance.get_results(
                      sort_by=None,
                      geotagged=self.geotag,
-                     limit=None
+                     limit=200
                  )]
                 )
             if len(header_list) == 1:
-                print(state, region, 'NO POSTS**')
+                print(state, region, "NO POSTS**")
                 # return None
             else:
                 print(len(header_list), state, region)
@@ -86,14 +89,12 @@ class CLHousingSelect:
 
     def write_to_file(self, write_list,
                       inst_site_name, inst_state_name):
-        date = datetime.date.today()
-        new_dir = f'{BASE_DIR}/Data/{date}'
-        if not os.path.exists(new_dir):
-            os.makedirs(new_dir)
+        if not os.path.exists(DATA_DIR):
+            os.makedirs(DATA_DIR)
         else:
             pass
-        os.chdir(new_dir)
-        title = f"{date}_geotag_{self.geotag}_craigslist_{self.inst_category}_{inst_site_name}_{inst_state_name.title()}.csv"
+        os.chdir(DATA_DIR)
+        title = f"{datetime.date.today()}_geotag_{self.geotag}_craigslist_{self.inst_category}_{inst_site_name}_{inst_state_name}.csv"
         with open(title, 'w', newline='') as rm_csv:
             writer = csv.writer(rm_csv, delimiter=',')
             try:
@@ -106,14 +107,14 @@ class CLHousingSelect:
 
 
 def my_logger(func):
-    logging.basicConfig(filename=f'{func.__name__}.log', level=logging.INFO)
+    logging.basicConfig(filename=f"{func.__name__}.log", level=logging.INFO)
 
     def wrapper(*args, **kwargs):
         date_time = str(datetime.datetime.now())[:-10]
         log_dict = clsd.extra_filters
         # remove addition of zip - consider logging zip or distance
         logging.info(
-            f'Ran with filters: {log_dict} at {date_time}')
+            f"Ran with filters: {log_dict} at {date_time}")
         return func(*args, **kwargs)
 
     return wrapper
@@ -124,14 +125,15 @@ class ExecSearch:
     search information into a format compatible with
     python-craigslist module. This class operates closely
     with CLHousingSelect. """
-    def __init__(self, house_filter, q, d):
+    def __init__(self, country, house_filter, q, d):
         self.q = q
         self.d = d
+        self.country = country
         self.house_filter = house_filter  # (e.g. 'apa' or 'roo')
         self.room_filter = {**clsd.extra_filters, **clsd.distance_filters}
-        self.code_break = ';n@nih;'
+        self.code_break = ";n@nih;"
         self.header = [
-            f"CL State{self.code_break}CL Region{self.code_break}"
+            f"CL Country{self.code_break}CL State{self.code_break}CL Region{self.code_break}"
             f"CL District{self.code_break}Housing Category{self.code_break}"
             f"Post ID{self.code_break}Repost of (Post ID){self.code_break}"
             f"Title{self.code_break}URL{self.code_break}"
@@ -140,12 +142,46 @@ class ExecSearch:
             f"Post has Image{self.code_break}Post has Geotag{self.code_break}"
             f"Bedrooms{self.code_break}Area"
             ]
+    
+    @my_logger
+    def cl_search(self, tup):
+        housing_dict = clsd.cat_dict
+        if len(tup) == 3:
+            self.area(tup, housing_dict)
+        else:
+            self.site(tup, housing_dict)
+
+    def site(self, tup, housing_dict):
+        state, reg = tup[0].lower(), tup[1].lower()
+        for cat in housing_dict:
+            if cat not in self.house_filter:
+                continue
+            else:
+                result = self.search_package(
+                    state, reg, cat, _geotag=self.d['geotag']
+                    )
+            if not result:
+                continue
+        self.concat_csv(state, reg)
+
+    def area(self, tup, housing_dict):
+        state, reg, sub_reg = tup[0].lower(), tup[1].lower(), tup[2].lower()
+        for cat in housing_dict:
+            if cat not in self.house_filter:
+                continue
+            else:
+                result = self.search_package(
+                    state, reg, cat, area=sub_reg, _geotag=self.d['geotag']
+                    )
+            if not result:
+                continue
+        self.concat_csv(state, sub_reg)
 
     def search_package(self, state,
                        reg, cat, _geotag, area=""):
         header_list = copy.deepcopy(self.header)
         housing_result = CLHousingSelect(
-            cat, self.room_filter, self.code_break, _geotag
+            self.country, cat, self.room_filter, self.code_break, _geotag
             )
         if area == "":
             area = reg
@@ -157,7 +193,7 @@ class ExecSearch:
                 return None
             else:
                 append_list = housing_result.parse_search(
-                    header_list, state.title(), reg, area, cat
+                    header_list, state, reg, area, cat
                     )
                 if not append_list:
                     return None
@@ -166,60 +202,55 @@ class ExecSearch:
         except AttributeError:
             pass
 
-    def site(self, tup, housing_dict):
-        state, reg = tup[0], tup[1]
-        for cat in housing_dict:
-            if cat not in self.house_filter:
-                continue
-            else:
-                result = self.search_package(
-                    state, reg, cat, _geotag=self.d['geotag']
-                    )
-            if not result:
-                continue
+    def concat_csv(self, state, region):
+        """
+        once all subsearches for a search category (e.g. CraigslistHousing)
+        is complete, concat all file content per state and region into one
+        .csv file -- this will compress the amount of filespace in your Data
+        directory
 
-    def area(self, tup, housing_dict):
-        state, reg, sub_reg = tup[0], tup[1], tup[2]
-        for cat in housing_dict:
-            if cat not in self.house_filter:
-                continue
-            else:
-                result = self.search_package(
-                    state, reg, cat, area=sub_reg, _geotag=self.d['geotag']
-                    )
-            if not result:
-                continue
-
-    @my_logger
-    def cl_search(self, tup):
-        housing_dict = clsd.cat_dict
-        if len(tup) == 3:
-            self.area(tup, housing_dict)
+        -- work on making code more elegant
+        """
+        if not os.path.exists(DATA_DIR):
+            print(f"{DATA_DIR} does not exist.")
         else:
-            self.site(tup, housing_dict)
+            os.chdir(DATA_DIR)
+            file_list = [i for i in os.listdir() if f"{region}_{state}" in i]
+            for i in enumerate(file_list):
+                if os.path.isfile(i[1]):
+                    if i[0] == 0:
+                        cat_file = pd.read_csv(i[1])
+                    else:
+                        cat_file = cat_file.append(pd.read_csv(i[1]))
+                    os.remove(i[1])
+                else:
+                    print('no_file')
+            try:
+                cat_file.to_csv(f"CraigslistHousing_{state}_{region}.csv",index=False)
+            except UnboundLocalError as error:
+                handle_error(error)
 
 
 def handle_error(error):
-    print(f'There was an error:: {error} - nothing written to file.')
+    print(f"There was an error:: {error} - nothing written to file.")
     logging.basicConfig(
         filename=f'{BASE_DIR}/CL_Mining_Error.log', level=logging.INFO
         )
-    logging.info(f'Time:: {datetime.datetime.today()}\nError:: {error}')
+    logging.info(f"Time:: {datetime.datetime.today()}\nError:: {error}")
     time.sleep(5)  # provide 5 sec wait time before continuing search
 
 
 def execute_search(country, state, q, d):
-    search_criteria = ExecSearch(sk.selected_cat, q, d)
+    search_criteria = ExecSearch(country, sk.selected_cat, q, d)
     search_criteria.cl_search(state)
 
 
 def main(_geotag):
     manager = mp.Manager()
-    stop_event = manager.Event()
     q = manager.Queue()
     d = manager.dict()
     d['geotag'] = _geotag
-    pool = mp.Pool(mp.cpu_count() + 2) # spawn?
+    pool = mp.Pool(mp.cpu_count() + 2)
     jobs = []
     country_list = [country for country in Search.__dict__ if country[0:2] != '__']
     for country in country_list:
@@ -228,15 +259,16 @@ def main(_geotag):
             jobs.append(job)
     try:
         for job in jobs:
-            job.get(300) # timeout after 300 sec
+            job.get(3000) # timeout after 600 sec
     except mp.TimeoutError:
+        print("process exceeded 10 minutes: mutliprocessing terminated.")
         pool.terminate()
-    print('process complete')
+    print("process complete")
 
 
 if __name__ == '__main__':
     GEOTAG_INPUT = (input(
         "Would you like to search for geotagged results?[y/n]: "
         )).lower()
-    GEOTAG = True if GEOTAG_INPUT == "y" else False
+    GEOTAG = True if GEOTAG_INPUT == 'y' else False
     main(GEOTAG)

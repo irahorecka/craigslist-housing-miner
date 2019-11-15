@@ -41,20 +41,6 @@ class Filters:
         'sha':'wanted: room & share',
         'sbw':'wanted: sublet & temp'}
 
-    apa_dict = {'aap':'apts & housing for rent',
-        'swp':'housing swap',
-        'off':'office & commercial',
-        'prk':'parking & storage',
-        'reb':'real estate - by broker',
-        'reo':'real estate - by owner',
-        'roo':'rooms & shares',
-        'sub':'sublets & temporary',
-        'vac':'vacation rentals',
-        'hou':'wanted: apts',
-        'rew':'wanted: real estate',
-        'sha':'wanted: room & share',
-        'sbw':'wanted: sublet & temp'}
-
 
 class Countries:
     united_states = {
