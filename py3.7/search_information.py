@@ -7,6 +7,6 @@ class SelectionKeys:
         'ohio', 'oklahoma', 'oregon', 'pennsylvania', 'rhode_island', 'south_carolina', 'south_dakota', 'tennessee', 'texas', 'utah', 'vermont', 'virginia', 
         'washington', 'west_virginia', 'wisconsin', 'wyoming']
     selected_reg = [] # e.g. ['sfbay','losangeles']
-    selected_cat = ['apa'] # e.g. ['apa', 'roo'] - search_cl.py will handle boston and newyork exceptions
+    selected_cat = ['apa']#, 'swp', 'off', 'prk', 'reb', 'reo', 'roo', 'sub', 'vac', 'hou', 'rew', 'sha', 'sbw'] # e.g. ['apa', 'roo'] - search_cl.py will handle boston and newyork exceptions
     district_list = [] # e.g. ['oakland','berkeley']
     dist_filters = [] # [zipcode, miles from zip]
