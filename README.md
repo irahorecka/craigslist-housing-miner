@@ -40,4 +40,3 @@ The **CL_Mining** tool is useful if you are intereted in studying housing posts 
 
 These features are scheduled to be implemented in the near future!<br><br>
 **Fin**
-
