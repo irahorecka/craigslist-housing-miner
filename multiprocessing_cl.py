@@ -252,7 +252,7 @@ def main(_geotag):
             jobs.append(job)
     try:
         for job in jobs:
-            job.get(3000) # timeout after 600 sec
+            job.get(3000) # timeout after 3000 sec
     except mp.TimeoutError:
         print("process exceeded 10 minutes: mutliprocessing terminated.")
         pool.terminate()
