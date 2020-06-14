@@ -25,9 +25,8 @@ def main(countries=[], geotagged=False):
 
 
 if __name__ == "__main__":
-    # simple demo for now - eventually accept user args and kwargs
     countries = input(
-        "Input a list of appropriate countries.\nIf no list provided, a global search will be conducted: "
+        "Input a list of appropriate countries.\nIf no list is provided, a global search will be conducted: "
     )
     if countries:
         countries = eval(countries)
