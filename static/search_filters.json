@@ -1,0 +1,22 @@
+{
+    "search_filters": {
+        "cats_ok": "",
+        "dogs_ok": "",
+        "has_image": "",
+        "is_furnished": "",
+        "max_bathrooms": "",
+        "max_bedrooms": "",
+        "max_ft2": "",
+        "max_price": "",
+        "min_bathrooms": "",
+        "min_bedrooms": "",
+        "min_ft2": "",
+        "min_price": "",
+        "no_smoking": "",
+        "private_bath": "",
+        "private_room": "",
+        "search_distance": "",
+        "wheelchair_acccess": "",
+        "zip_code": ""
+    }
+}
