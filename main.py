@@ -10,7 +10,10 @@ def main(countries=[], geotagged=False):
     specific_locations = []
     if countries:
         for country in countries:
-            specific_locations.extend(all_locations.get(country.lower()))
+            try:
+                specific_locations.extend(all_locations.get(country.lower()))
+            except TypeError:
+                print(f"{country} is not a valid country keyword.\n")
     else:
         # search every country
         for country, _ in all_locations.items():
