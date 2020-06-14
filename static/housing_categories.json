@@ -1,16 +1,17 @@
-{"housing_categories": {
-    "apa": "apts & housing for rent",
-    "swp": "housing swap",
-    "off": "office & commercial",
-    "prk": "parking & storage",
-    "reb": "real estate - by broker",
-    "reo": "real estate - by owner",
-    "roo": "rooms & shares",
-    "sub": "sublets & temporary",
-    "vac": "vacation rentals",
-    "hou": "wanted: apts",
-    "rew": "wanted: real estate",
-    "sha": "wanted: room & share",
-    "sbw": "wanted: sublet & temp"
+{
+    "housing_categories": {
+        "apa": "apts & housing for rent",
+        "hou": "wanted: apts",
+        "off": "office & commercial",
+        "prk": "parking & storage",
+        "reb": "real estate - by broker",
+        "reo": "real estate - by owner",
+        "rew": "wanted: real estate",
+        "roo": "rooms & shares",
+        "sbw": "wanted: sublet & temp",
+        "sha": "wanted: room & share",
+        "sub": "sublets & temporary",
+        "swp": "housing swap",
+        "vac": "vacation rentals"
     }
 }

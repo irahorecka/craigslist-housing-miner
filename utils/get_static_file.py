@@ -26,16 +26,4 @@ def craigslist_regions():
         BASE_DIR, "static", "craigslist_regions.json"
     )
     with open(craigslist_regions_path) as json_path:
-        craigslist_regions = json.load(json_path)
-    return craigslist_regions
-
-    # tidy_craigslist_regions = {}
-    # for country, regions in craigslist_regions.items():
-    #     tidy_craigslist_regions[country] = [tuple(region) for region in regions]
-    # return tidy_craigslist_regions
-
-
-if __name__ == "__main__":
-    print(housing_categories())
-    print(craigslist_regions())
-    print(search_filters())
+        return json.load(json_path)

@@ -10,6 +10,8 @@ DATA_DIR = os.path.join(BASE_DIR, "data", f"{datetime.date.today()}")
 
 
 def scrape_housing(craigslist_region):
+    """Module function to appropriately scrape and write Craigslist
+    housing information using specified housing categories and filters."""
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
 
@@ -21,7 +23,7 @@ def scrape_housing(craigslist_region):
         sub_region = ""
 
     for category in housing_categories:
-        search_result = filter_and_search_housing(
+        search_result = filter_and_instantiate_housing(
             state, region, sub_region, category, geotag_bool
         )
         if not search_result:
@@ -38,7 +40,9 @@ def scrape_housing(craigslist_region):
         concat_similar_results_to_csv(state, region)
 
 
-def filter_and_search_housing(state, reg, sub_reg, housing_cat, geotag):
+def filter_and_instantiate_housing(state, reg, sub_reg, housing_cat, geotag):
+    """A function to apply housing filters and instantiate
+    craigslist.CraigslistHousing object with appropriate data."""
     search_filters = get_static_file.search_filters()
     print(state, reg, housing_cat)
     if sub_reg:
@@ -58,6 +62,9 @@ def filter_and_search_housing(state, reg, sub_reg, housing_cat, geotag):
 def mine_housing_data(
     housing_obj, state, region, housing_category, geotagged, code_break=";n@nih;"
 ):
+    """A function to appropritely concatenate information sourced from
+    the Craigslist housing object to a header list for downstream CSV
+    export."""
     header = [
         f"State or Country{code_break}Region{code_break}"
         f"Housing Category{code_break}"
@@ -85,17 +92,19 @@ def mine_housing_data(
             ]
         )
         return header
-    except (AttributeError, OSError) as e:
-        print(e)
+    except (AttributeError, OSError) as error:
+        print(error)
         return
 
 
 def is_data_related(func):
+    """Wrapper to change into data directory if function is pertaining
+    to data export."""
+
     def wrapper(*args, **kwargs):
         os.chdir(DATA_DIR)
         func(*args, **kwargs)
         os.chdir(BASE_DIR)
-        return
 
     return wrapper
 
@@ -104,21 +113,24 @@ def is_data_related(func):
 def write_single_result_to_csv(
     search_result, state, region, category, code_break=";n@nih;"
 ):
+    """Write single result file to CSV (i.e. file with state, region,
+    and housing category)"""
     file_title = f"{datetime.date.today()}_craigslist_{category}_{state}_{region}.csv"
     with open(file_title, "w", newline="") as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
         try:
             writer.writerows([row.split(code_break) for row in search_result])
-        except TypeError as e:
-            print(e)
+        except TypeError as error:
+            print(error)
 
 
 @is_data_related
 def concat_similar_results_to_csv(state, reg):
+    """Concatenate all CSV files pertaining to a state and region
+    (or sub-region) to one CSV file."""
     grouped_files = [file for file in os.listdir() if f"{state}_{reg}" in file]
     for index, file in enumerate(grouped_files):
         if os.path.isfile(file):
-            print(index, file)
             if index == 0:
                 concat_file = pd.read_csv(file)
             else:
@@ -126,5 +138,5 @@ def concat_similar_results_to_csv(state, reg):
             os.remove(file)
     try:
         concat_file.to_csv(f"CraigslistHousing_{state}_{reg}.csv", index=False)
-    except UnboundLocalError as e:
-        print(e)
+    except UnboundLocalError as error:
+        print(error)
