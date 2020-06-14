@@ -25,7 +25,7 @@ Another example of a CSV file for Tokyo, Japan would look like this:<br>
 The user is given two prompts:<br>
 ```Input a list of appropriate countries.```<br>
 ```If no list is provided, a global search will be conducted: ```<br><br>
-Input a list of appropriate country names in which you would like to search. For example:<br>
+Input a list of appropriate country keywords in which you would like to search. You may find the full list of country keywords <a href="https://i.imgur.com/WGARByx.png">here</a>. For example:<br>
 ```['united_states', 'japan', 'canada']```<br><br>
 
 ```Would you like to include geotags of your Craigslist posts [y/n]: ``` <br>
@@ -35,7 +35,7 @@ Type ```y``` if you would like to receive geographic coordinates for every craig
 To mitigate this, you can omit geotags by typing ```n```:<br>
 <img src="https://i.imgur.com/4Yl2zN6.png" alt="geotag=False"><br><br>
 
-The protocol will exit once the process is finished; otherwise, you may have to repeatedly press ```CTRL + C``` in your operating terminal to properly exit the application.<br>
+The application will exit once the process is finished; otherwise, you may have to repeatedly press ```CTRL + C``` in your operating terminal to properly exit the application.<br>
 
 ## Data
 All data is stored in the ```craigslistHousingMiner/Data/{date data acquired}``` directory.<br>
@@ -47,5 +47,5 @@ For example:<br>
 1) The current state of the project is not a PyPI library.
 2) Lack of GUI to facilitate easy selection of housing type(s), countries, regions, etc.
 
-These features are scheduled to be implemented in the near future!<br><br>
+These features are scheduled to be implemented in the near future.<br><br>
 **Fin**
