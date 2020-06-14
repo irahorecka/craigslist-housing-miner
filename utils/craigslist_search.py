@@ -12,6 +12,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data", f"{datetime.date.today()}")
 def scrape_housing(craigslist_region):
     """Module function to appropriately scrape and write Craigslist
     housing information using specified housing categories and filters."""
+
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
 
@@ -23,7 +24,7 @@ def scrape_housing(craigslist_region):
         sub_region = ""
 
     for category in housing_categories:
-        search_result = filter_and_instantiate_housing(
+        search_result = query_housing_data(
             state, region, sub_region, category, geotag_bool
         )
         if not search_result:
@@ -40,34 +41,41 @@ def scrape_housing(craigslist_region):
         concat_similar_results_to_csv(state, region)
 
 
-def filter_and_instantiate_housing(state, reg, sub_reg, housing_cat, geotag):
+def query_housing_data(state, reg, sub_reg, housing_cat, geotag):
     """A function to apply housing filters and instantiate
     craigslist.CraigslistHousing object with appropriate data."""
+
     search_filters = get_static_file.search_filters()
-    print(state, reg, housing_cat)
     if sub_reg:
         housing_object = CraigslistHousing(
             site=reg, area=sub_reg, category=housing_cat, filters=search_filters
+        )
+        return mine_housing_data(
+            housing_object, state, reg, housing_cat, geotag, sub_reg=sub_reg
         )
     else:
         housing_object = CraigslistHousing(
             site=reg, category=housing_cat, filters=search_filters
         )
-
-    if not housing_object:
-        return
-    return mine_housing_data(housing_object, state, reg, housing_cat, geotag)
+        return mine_housing_data(housing_object, state, reg, housing_cat, geotag)
 
 
 def mine_housing_data(
-    housing_obj, state, region, housing_category, geotagged, code_break=";n@nih;"
+    housing_obj,
+    state,
+    region,
+    housing_category,
+    geotagged,
+    sub_reg="",
+    code_break=";n@nih;",
 ):
     """A function to appropritely concatenate information sourced from
     the Craigslist housing object to a header list for downstream CSV
     export."""
+
     header = [
         f"State or Country{code_break}Region{code_break}"
-        f"Housing Category{code_break}"
+        f"Subregion{code_break}Housing Category{code_break}"
         f"Post ID{code_break}Repost of (Post ID){code_break}"
         f"Title{code_break}URL{code_break}"
         f"Date Posted{code_break}Time Posted{code_break}"
@@ -79,6 +87,7 @@ def mine_housing_data(
         header.extend(
             [
                 f"{state}{code_break}{region}{code_break}"
+                f"{sub_reg if sub_reg else region}{code_break}"
                 f"{get_static_file.housing_categories().get(housing_category)}{code_break}"
                 f"{post['id']}{code_break}{post['repost_of']}{code_break}"
                 f"{post['name']}{code_break}{post['url']}{code_break}"
@@ -115,6 +124,7 @@ def write_single_result_to_csv(
 ):
     """Write single result file to CSV (i.e. file with state, region,
     and housing category)"""
+
     file_title = f"{datetime.date.today()}_craigslist_{category}_{state}_{region}.csv"
     with open(file_title, "w", newline="") as csv_file:
         writer = csv.writer(csv_file, delimiter=",")
@@ -128,6 +138,7 @@ def write_single_result_to_csv(
 def concat_similar_results_to_csv(state, reg):
     """Concatenate all CSV files pertaining to a state and region
     (or sub-region) to one CSV file."""
+
     grouped_files = [file for file in os.listdir() if f"{state}_{reg}" in file]
     for index, file in enumerate(grouped_files):
         if os.path.isfile(file):
