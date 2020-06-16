@@ -38,9 +38,9 @@ To mitigate this, you can omit geotags by typing ```n```:<br>
 The application will exit once the process is finished; otherwise, you may have to repeatedly press ```CTRL + C``` in your operating terminal to properly exit the application.<br>
 
 ## Data
-All data is stored in the ```craigslistHousingMiner/Data/{date data acquired}``` directory.<br>
+All data is stored in the ```craigslistHousingMiner/data/{date data acquired}``` directory.<br>
 For example:<br>
-```craigslistHousingMiner/Data/2020-06-14```<br>
+```craigslistHousingMiner/data/2020-06-14```<br>
 
 ## Summary
 **craigslistHousingMiner** is a useful tool if you are intereted in studying housing posts on Craigslist. However, there are two limitations in the tool's current state:<br>
