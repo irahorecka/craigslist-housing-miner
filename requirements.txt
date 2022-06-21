@@ -2,7 +2,7 @@ beautifulsoup4==4.9.1
 certifi==2020.4.5.2
 chardet==3.0.4
 idna==2.9
-numpy==1.18.5
+numpy==1.22.0
 pandas==1.0.4
 python-craigslist==1.0.7
 python-dateutil==2.8.1
