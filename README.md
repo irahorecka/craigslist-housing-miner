@@ -1,5 +1,5 @@
-# craigslistHousingMiner
-Welcome to **craigslistHousingMiner**, a web scraping tool that extracts information from up to *every* Craigslist Housing post around the world.<br>
+# craigslist-housing-miner
+Welcome to **craigslist-housing-miner**, a web scraping tool that extracts information from up to *every* Craigslist Housing post around the world.<br>
 **Note:** This tool should only be used for personal use and data analysis.
 
 <p align = 'center'>
@@ -38,12 +38,12 @@ To mitigate this, you can omit geotags by typing ```n```:<br>
 The application will exit once the process is finished; otherwise, you may have to repeatedly press ```CTRL + C``` in your operating terminal to properly exit the application.<br>
 
 ## Data
-All data is stored in the ```craigslistHousingMiner/data/{date data acquired}``` directory.<br>
+All data is stored in the ```craigslist-housing-miner/data/{date data acquired}``` directory.<br>
 For example:<br>
-```craigslistHousingMiner/data/2020-06-14```<br>
+```craigslist-housing-miner/data/2020-06-14```<br>
 
 ## Summary
-**craigslistHousingMiner** is a useful tool if you are intereted in studying housing posts on Craigslist. However, there are two limitations in the tool's current state:<br>
+**craigslist-housing-miner** is a useful tool if you are intereted in studying housing posts on Craigslist. However, there are two limitations in the tool's current state:<br>
 1) The current state of the project is not a PyPI library.
 2) Lack of GUI to facilitate easy selection of housing type(s), countries, regions, etc.
 
